@@ -1,0 +1,16 @@
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester, org.scalatest.tools.Framework$$anon$1@75e2a60e, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester2, org.scalatest.tools.Framework$$anon$1@75e2a60e, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIFTester:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIF stage[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIFTester2:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIF stage[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 3 seconds, 273 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 2[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 2, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	IFTester[0m
+[0m[[0m[0mdebug[0m] [0m[0m	IFTester2[0m

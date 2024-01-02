@@ -2,25 +2,42 @@ import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 
-
-class IFTester extends AnyFlatSpec with ChiselScalatestTester {
-  "IF module" should "pass" in {
-    test( new IFModule.withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
-      println("We are generting a VCD file with the test of the vending machine")
-      dut.io.price.poke(7.U)
-      dut.clock.step(3)
-      dut.io.coin2.poke(true.B)
-      dut.clock.step(3)
-      dut.io.coin2.poke(false.B)
-      dut.clock.step(6)
-      dut.io.coin5.poke(true.B)
-      dut.clock.step(3)
-      dut.io.coin5.poke(false.B)
-      dut.clock.step(8)
-      dut.io.buy.poke(true.B)
-      dut.clock.step(3)
-      dut.io.buy.poke(false.B)
-      dut.clock.step(10)
-    })
+class IFTester extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "IF stage" should "pass" in {
+    test(new IFModule) { dut =>
+      dut.io.PCScr.poke(false.B)
+      dut.io.BranchAddr.poke(0.U)
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke(1.U)
+      dut.io.wrEna.poke(true.B)
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke(2.U)
+      println("pc after 1 clockcycles is:" + dut.io.PC.peekInt())
+      dut.clock.step(1)
+      dut.io.Instruction.expect(1.U) // (pc is incremented, then another cycle for read) = 1 cycle delay
+      dut.clock.step(1)
+      println("pc after 3 clockcycles is:" + dut.io.PC.peekInt())
+      dut.io.Instruction.expect(2.U)
+    }
+  }
+}
+class IFTester2 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "IF stage" should "pass" in {
+    test(new IFModule) { dut =>
+      dut.io.PCScr.poke(true.B)
+      dut.io.BranchAddr.poke(100.U)
+      dut.io.wrAddr.poke(100.U)
+      dut.io.wrData.poke(4.U)
+      dut.io.wrEna.poke(true.B)
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      println("pc after branch is:" + dut.io.PC.peekInt())
+      println("Instruction after branch is (expect 0):" + dut.io.Instruction.peekInt())
+      dut.clock.step(1)
+      dut.io.Instruction.expect(4.U)
+    }
   }
 }

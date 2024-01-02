@@ -18,7 +18,6 @@ class TopG extends Module {
 
 // ------------------------------------------------------------------------------
 
-// generate Verilog
 object TopG extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new TopG)
 }

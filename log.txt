@@ -11,7 +11,12 @@ Dag 1:
     Done:
         Git
         Project Setup (IntelliJ SBT)
-    Hvad arbejder vi på:
         Pipeline stage 1: Fetching (IF stage)
+        Test Pipeline stage 1: Fetching (IF stage)
+    Questions:
+        PC as reg? Mem delay 1 cycle
+        How is instr mem filled?
+
+
 
 Dag 2:
