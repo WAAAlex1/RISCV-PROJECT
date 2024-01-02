@@ -1,0 +1,17 @@
+
+General outline:
+    3 or 4 stage pipelined processor
+    Forwarding
+    Latex report
+
+    Split Memory
+
+
+Dag 1:
+    Done:
+        Git
+        Project Setup (IntelliJ SBT)
+    Hvad arbejder vi på:
+        Pipeline stage 1: Fetching (IF stage)
+
+Dag 2:
