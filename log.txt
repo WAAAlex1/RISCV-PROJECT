@@ -20,10 +20,11 @@ Dag 1:
                 Serial port, vec in scala or bootloader
 Dag 2:
     Husk
-        
+        Vi ignorerer begge de to første bits på jump imm fordi vi kun skal jumpe mindst 4 byte ad gangen
     Done
         ID Stage
 
     Questions:
         What is the alternative to the control signals in the book? Answer: Nothing
-
+        In the figure 4.49, what are the ALU control inputs actually here?
+        

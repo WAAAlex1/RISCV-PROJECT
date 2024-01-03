@@ -1,37 +1,7 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IDTester.scala:19:18: overloaded method value expect with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IDTester.scala:12:27: overloaded method value poke with alternatives:[0m
 [0m[[0m[31merror[0m] [0m[0m  (value: BigInt)Unit <and>[0m
 [0m[[0m[31merror[0m] [0m[0m  (value: chisel3.SInt)Unit[0m
 [0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.imm.expect(1.U)[0m
-[0m[[0m[31merror[0m] [0m[0m                 ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:9:14: value PCScr is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.PCScr.poke(false.B)[0m
-[0m[[0m[31merror[0m] [0m[0m             ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:10:25: overloaded method value poke with alternatives:[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: BigInt)Unit <and>[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: chisel3.SInt)Unit[0m
-[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.branchAddr.poke(0.U)[0m
-[0m[[0m[31merror[0m] [0m[0m                        ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:18:53: value PC is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      println("pc after 1 clockcycles is:" + dut.io.PC.peekInt())[0m
-[0m[[0m[31merror[0m] [0m[0m                                                    ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:23:53: value PC is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      println("pc after 3 clockcycles is:" + dut.io.PC.peekInt())[0m
-[0m[[0m[31merror[0m] [0m[0m                                                    ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:31:14: value PCScr is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.PCScr.poke(true.B)[0m
-[0m[[0m[31merror[0m] [0m[0m             ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:32:25: overloaded method value poke with alternatives:[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: BigInt)Unit <and>[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: chisel3.SInt)Unit[0m
-[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.branchAddr.poke(100.U)[0m
-[0m[[0m[31merror[0m] [0m[0m                        ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:38:46: value PC is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      println("pc after branch is:" + dut.io.PC.peekInt())[0m
-[0m[[0m[31merror[0m] [0m[0m                                             ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:39:66: value Instruction is not a member of chisel3.Bundle{val pcScr: chisel3.Bool; val branchAddr: chisel3.SInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
-[0m[[0m[31merror[0m] [0m[0m      println("Instruction after branch is (expect 4):" + dut.io.Instruction.peekInt())[0m
-[0m[[0m[31merror[0m] [0m[0m                                                                 ^[0m
-[0m[[0m[31merror[0m] [0m[0m9 errors found[0m
+[0m[[0m[31merror[0m] [0m[0m      dut.io.writeRegData.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                          ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m

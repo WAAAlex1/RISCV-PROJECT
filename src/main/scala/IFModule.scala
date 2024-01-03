@@ -2,14 +2,14 @@ import chisel3._
 
 class IFModule extends Module {
   val io = IO(new Bundle{
-    val pcScr = Input(Bool())
-    val branchAddr = Input(UInt(32.W))
-    val instruction = Output(UInt(32.W))
-    val pc = Output(UInt(32.W))
+    val pcScr         = Input(Bool())
+    val branchAddr    = Input(UInt(32.W))
+    val instruction   = Output(UInt(32.W))
+    val pc            = Output(UInt(32.W))
 
-    val wrAddr = Input(UInt(10.W))
-    val wrData = Input(UInt(32.W))
-    val wrEna = Input(Bool())
+    val wrAddr        = Input(UInt(10.W))
+    val wrData        = Input(UInt(32.W))
+    val wrEna         = Input(Bool())
   })
 
   //-----------------------------------------------------------------------------

@@ -6,10 +6,10 @@ circuit IDModule :
     input io_pcIn : UInt<32>
     input io_writeRegAddr : UInt<5>
     input io_regWriteIn : UInt<1>
-    input io_writeRegData : UInt<32>
+    input io_writeRegData : SInt<32>
     input io_instr : UInt<32>
-    output io_rs1data : UInt<32>
-    output io_rs2data : UInt<32>
+    output io_rs1data : SInt<32>
+    output io_rs2data : SInt<32>
     output io_pcOut : UInt<32>
     output io_rd : UInt<5>
     output io_aluControl : UInt<4>
@@ -28,73 +28,73 @@ circuit IDModule :
       reset => (UInt<1>("h0"), writeRegAddr) @[IDModule.scala 32:29]
     reg regWriteIn : UInt<1>, clock with :
       reset => (UInt<1>("h0"), regWriteIn) @[IDModule.scala 33:27]
-    reg writeRegData : UInt<32>, clock with :
+    reg writeRegData : SInt<32>, clock with :
       reset => (UInt<1>("h0"), writeRegData) @[IDModule.scala 34:29]
     reg instr : UInt<32>, clock with :
       reset => (UInt<1>("h0"), instr) @[IDModule.scala 35:22]
-    reg registerFile_0 : UInt<32>, clock with :
+    reg registerFile_0 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_0) @[IDModule.scala 38:25]
-    reg registerFile_1 : UInt<32>, clock with :
+    reg registerFile_1 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_1) @[IDModule.scala 38:25]
-    reg registerFile_2 : UInt<32>, clock with :
+    reg registerFile_2 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_2) @[IDModule.scala 38:25]
-    reg registerFile_3 : UInt<32>, clock with :
+    reg registerFile_3 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_3) @[IDModule.scala 38:25]
-    reg registerFile_4 : UInt<32>, clock with :
+    reg registerFile_4 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_4) @[IDModule.scala 38:25]
-    reg registerFile_5 : UInt<32>, clock with :
+    reg registerFile_5 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_5) @[IDModule.scala 38:25]
-    reg registerFile_6 : UInt<32>, clock with :
+    reg registerFile_6 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_6) @[IDModule.scala 38:25]
-    reg registerFile_7 : UInt<32>, clock with :
+    reg registerFile_7 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_7) @[IDModule.scala 38:25]
-    reg registerFile_8 : UInt<32>, clock with :
+    reg registerFile_8 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_8) @[IDModule.scala 38:25]
-    reg registerFile_9 : UInt<32>, clock with :
+    reg registerFile_9 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_9) @[IDModule.scala 38:25]
-    reg registerFile_10 : UInt<32>, clock with :
+    reg registerFile_10 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_10) @[IDModule.scala 38:25]
-    reg registerFile_11 : UInt<32>, clock with :
+    reg registerFile_11 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_11) @[IDModule.scala 38:25]
-    reg registerFile_12 : UInt<32>, clock with :
+    reg registerFile_12 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_12) @[IDModule.scala 38:25]
-    reg registerFile_13 : UInt<32>, clock with :
+    reg registerFile_13 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_13) @[IDModule.scala 38:25]
-    reg registerFile_14 : UInt<32>, clock with :
+    reg registerFile_14 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_14) @[IDModule.scala 38:25]
-    reg registerFile_15 : UInt<32>, clock with :
+    reg registerFile_15 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_15) @[IDModule.scala 38:25]
-    reg registerFile_16 : UInt<32>, clock with :
+    reg registerFile_16 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_16) @[IDModule.scala 38:25]
-    reg registerFile_17 : UInt<32>, clock with :
+    reg registerFile_17 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_17) @[IDModule.scala 38:25]
-    reg registerFile_18 : UInt<32>, clock with :
+    reg registerFile_18 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_18) @[IDModule.scala 38:25]
-    reg registerFile_19 : UInt<32>, clock with :
+    reg registerFile_19 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_19) @[IDModule.scala 38:25]
-    reg registerFile_20 : UInt<32>, clock with :
+    reg registerFile_20 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_20) @[IDModule.scala 38:25]
-    reg registerFile_21 : UInt<32>, clock with :
+    reg registerFile_21 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_21) @[IDModule.scala 38:25]
-    reg registerFile_22 : UInt<32>, clock with :
+    reg registerFile_22 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_22) @[IDModule.scala 38:25]
-    reg registerFile_23 : UInt<32>, clock with :
+    reg registerFile_23 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_23) @[IDModule.scala 38:25]
-    reg registerFile_24 : UInt<32>, clock with :
+    reg registerFile_24 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_24) @[IDModule.scala 38:25]
-    reg registerFile_25 : UInt<32>, clock with :
+    reg registerFile_25 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_25) @[IDModule.scala 38:25]
-    reg registerFile_26 : UInt<32>, clock with :
+    reg registerFile_26 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_26) @[IDModule.scala 38:25]
-    reg registerFile_27 : UInt<32>, clock with :
+    reg registerFile_27 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_27) @[IDModule.scala 38:25]
-    reg registerFile_28 : UInt<32>, clock with :
+    reg registerFile_28 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_28) @[IDModule.scala 38:25]
-    reg registerFile_29 : UInt<32>, clock with :
+    reg registerFile_29 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_29) @[IDModule.scala 38:25]
-    reg registerFile_30 : UInt<32>, clock with :
+    reg registerFile_30 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_30) @[IDModule.scala 38:25]
-    reg registerFile_31 : UInt<32>, clock with :
+    reg registerFile_31 : SInt<32>, clock with :
       reset => (UInt<1>("h0"), registerFile_31) @[IDModule.scala 38:25]
     node _T = bits(instr, 6, 1) @[IDModule.scala 55:15]
     node _T_1 = eq(UInt<5>("h19"), _T) @[IDModule.scala 55:22]
@@ -198,7 +198,7 @@ circuit IDModule :
     node _T_11 = or(writeRegAddr, UInt<5>("h0"))
     node _T_12 = bits(_T_11, 4, 0)
     node _registerFile_T_12 = writeRegData @[IDModule.scala 123:{32,32}]
-    node _GEN_42 = mux(eq(UInt<1>("h0"), _T_12), _registerFile_T_12, UInt<1>("h0")) @[IDModule.scala 123:{32,32} 39:19]
+    node _GEN_42 = mux(eq(UInt<1>("h0"), _T_12), _registerFile_T_12, asSInt(UInt<1>("h0"))) @[IDModule.scala 123:{32,32} 39:19]
     node _GEN_43 = mux(eq(UInt<1>("h1"), _T_12), _registerFile_T_12, registerFile_1) @[IDModule.scala 123:{32,32} 38:25]
     node _GEN_44 = mux(eq(UInt<2>("h2"), _T_12), _registerFile_T_12, registerFile_2) @[IDModule.scala 123:{32,32} 38:25]
     node _GEN_45 = mux(eq(UInt<2>("h3"), _T_12), _registerFile_T_12, registerFile_3) @[IDModule.scala 123:{32,32} 38:25]
@@ -230,7 +230,7 @@ circuit IDModule :
     node _GEN_71 = mux(eq(UInt<5>("h1d"), _T_12), _registerFile_T_12, registerFile_29) @[IDModule.scala 123:{32,32} 38:25]
     node _GEN_72 = mux(eq(UInt<5>("h1e"), _T_12), _registerFile_T_12, registerFile_30) @[IDModule.scala 123:{32,32} 38:25]
     node _GEN_73 = mux(eq(UInt<5>("h1f"), _T_12), _registerFile_T_12, registerFile_31) @[IDModule.scala 123:{32,32} 38:25]
-    node _GEN_74 = mux(regWriteIn, _GEN_42, UInt<1>("h0")) @[IDModule.scala 122:19 39:19]
+    node _GEN_74 = mux(regWriteIn, _GEN_42, asSInt(UInt<1>("h0"))) @[IDModule.scala 122:19 39:19]
     node _GEN_75 = mux(regWriteIn, _GEN_43, registerFile_1) @[IDModule.scala 122:19 38:25]
     node _GEN_76 = mux(regWriteIn, _GEN_44, registerFile_2) @[IDModule.scala 122:19 38:25]
     node _GEN_77 = mux(regWriteIn, _GEN_45, registerFile_3) @[IDModule.scala 122:19 38:25]

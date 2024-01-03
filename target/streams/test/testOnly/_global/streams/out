@@ -1,11 +1,11 @@
-[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IDTester, org.scalatest.tools.Framework$$anon$1@71171b, false, [SuiteSelector])[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mIDTester:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mID stage[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(EXTester, org.scalatest.tools.Framework$$anon$1@591b2997, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mEXTester:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mEX stage[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 4 seconds, 358 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 3 seconds, 312 milliseconds.[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 1[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
-[0m[[0m[0mdebug[0m] [0m[0m	IDTester[0m
+[0m[[0m[0mdebug[0m] [0m[0m	EXTester[0m

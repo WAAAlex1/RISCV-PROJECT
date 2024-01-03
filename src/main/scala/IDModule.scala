@@ -2,27 +2,27 @@ import chisel3._
 import chisel3.util._
 class IDModule extends Module {
   val io = IO(new Bundle{
-    val pcIn = Input(UInt(32.W))
-    val writeRegAddr = Input(UInt(5.W))
-    val regWriteIn = Input(Bool())
-    val writeRegData = Input(UInt(32.W))
-    val instr = Input(UInt(32.W))
+    val pcIn          = Input(UInt(32.W))
+    val writeRegAddr  = Input(UInt(5.W))
+    val regWriteIn    = Input(Bool())
+    val writeRegData  = Input(SInt(32.W))
+    val instr         = Input(UInt(32.W))
 
-    val rs1data = Output(UInt(32.W))
-    val rs2data = Output(UInt(32.W))
-    val pcOut = Output(UInt(32.W))
-    val rd = Output(UInt(5.W))
-    val aluControl = Output(UInt(4.W))
-    val imm = Output(SInt(32.W))
+    val rs1data       = Output(SInt(32.W))
+    val rs2data       = Output(SInt(32.W))
+    val pcOut         = Output(UInt(32.W))
+    val rd            = Output(UInt(5.W))
+    val aluControl    = Output(UInt(4.W))
+    val imm           = Output(SInt(32.W))
 
     //Control signals?:
-    val aluSRC = Output(Bool())
-    val aluOP = Output(UInt(2.W))
-    val branch = Output(Bool())
-    val memRead = Output(Bool())
-    val memWrite = Output(Bool())
-    val regWriteOut = Output(Bool())
-    val memToReg = Output(Bool())
+    val aluSRC        = Output(Bool())
+    val aluOP         = Output(UInt(2.W))
+    val branch        = Output(Bool())
+    val memRead       = Output(Bool())
+    val memWrite      = Output(Bool())
+    val regWriteOut   = Output(Bool())
+    val memToReg      = Output(Bool())
   })
 
   //-----------------------------------------------------------------------------
@@ -31,12 +31,12 @@ class IDModule extends Module {
   val pcIn = RegNext(io.pcIn)
   val writeRegAddr = RegNext(io.writeRegAddr)
   val regWriteIn = RegNext(io.regWriteIn)
-  val writeRegData = RegNext(io. writeRegData)
+  val writeRegData = RegNext(io.writeRegData)
   val instr = RegNext(io.instr)
 
   //RegisterFile
-  val registerFile = Reg(Vec(32,UInt(32.W)))
-  registerFile(0) := 0.U //x0 = 0
+  val registerFile = Reg(Vec(32,SInt(32.W)))
+  registerFile(0) := 0.S //x0 = 0
 
   //control signals base-case:
   io.aluOP := 2.U
