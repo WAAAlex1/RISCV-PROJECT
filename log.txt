@@ -15,8 +15,15 @@ Dag 1:
         Test Pipeline stage 1: Fetching (IF stage)
     Questions:
         PC as reg? Mem delay 1 cycle
+            fixed
         How is instr mem filled?
-
-
-
+                Serial port, vec in scala or bootloader
 Dag 2:
+    Husk
+        
+    Done
+        ID Stage
+
+    Questions:
+        What is the alternative to the control signals in the book? Answer: Nothing
+

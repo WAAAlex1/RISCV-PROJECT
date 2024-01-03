@@ -42,10 +42,10 @@ circuit IFModule :
   module IFModule :
     input clock : Clock
     input reset : UInt<1>
-    input io_PCScr : UInt<1>
-    input io_BranchAddr : UInt<32>
-    output io_Instruction : UInt<32>
-    output io_PC : UInt<32>
+    input io_pcScr : UInt<1>
+    input io_branchAddr : UInt<32>
+    output io_instruction : UInt<32>
+    output io_pc : UInt<32>
     input io_wrAddr : UInt<10>
     input io_wrData : UInt<32>
     input io_wrEna : UInt<1>
@@ -53,15 +53,19 @@ circuit IFModule :
     inst instrMem of InstrMemModule @[IFModule.scala 18:24]
     reg pc : UInt<32>, clock with :
       reset => (UInt<1>("h0"), pc) @[IFModule.scala 17:19]
-    node _pc_T = add(pc, UInt<1>("h1")) @[IFModule.scala 27:42]
-    node _pc_T_1 = tail(_pc_T, 1) @[IFModule.scala 27:42]
-    node _pc_T_2 = mux(io_PCScr, io_BranchAddr, _pc_T_1) @[IFModule.scala 27:12]
-    io_Instruction <= instrMem.io_rdData @[IFModule.scala 30:18]
-    io_PC <= pc @[IFModule.scala 32:9]
-    pc <= mux(reset, UInt<32>("h0"), _pc_T_2) @[IFModule.scala 17:{19,19} 27:6]
+    node _pcAdded_T = add(pc, UInt<1>("h1")) @[IFModule.scala 25:17]
+    node _pcAdded_T_1 = tail(_pcAdded_T, 1) @[IFModule.scala 25:17]
+    node _pcMux_T = shr(io_branchAddr, 2) @[IFModule.scala 29:40]
+    node pcAdded = _pcAdded_T_1 @[IFModule.scala 24:28 25:11]
+    node _pcMux_T_1 = mux(io_pcScr, _pcMux_T, pcAdded) @[IFModule.scala 29:15]
+    node _io_pc_T = shl(pc, 2) @[IFModule.scala 39:15]
+    node pcMux = _pcMux_T_1 @[IFModule.scala 28:26 29:9]
+    io_instruction <= instrMem.io_rdData @[IFModule.scala 36:18]
+    io_pc <= bits(_io_pc_T, 31, 0) @[IFModule.scala 39:9]
+    pc <= mux(reset, UInt<32>("h0"), pcMux) @[IFModule.scala 17:{19,19} 30:6]
     instrMem.clock <= clock
     instrMem.reset <= reset
-    instrMem.io_rdAddr <= bits(pc, 9, 0) @[IFModule.scala 24:22]
+    instrMem.io_rdAddr <= bits(pcMux, 9, 0) @[IFModule.scala 33:22]
     instrMem.io_wrAddr <= io_wrAddr @[IFModule.scala 20:22]
     instrMem.io_wrData <= io_wrData @[IFModule.scala 21:22]
     instrMem.io_wrEna <= io_wrEna @[IFModule.scala 19:21]

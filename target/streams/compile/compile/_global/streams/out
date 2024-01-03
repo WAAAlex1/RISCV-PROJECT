@@ -1,9 +1,50 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IFModule.scala:14:18: inferred type arguments [InstrMemModule] do not conform to macro method apply's type parameter bounds [T <: chisel3.experimental.BaseModule][0m
-[0m[[0m[31merror[0m] [0m[0m  val instrMem = Module(new InstrMemModule)[0m
-[0m[[0m[31merror[0m] [0m[0m                 ^[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IFModule.scala:14:25: type mismatch;[0m
-[0m[[0m[31merror[0m] [0m[0m found   : InstrMemModule[0m
-[0m[[0m[31merror[0m] [0m[0m required: T[0m
-[0m[[0m[31merror[0m] [0m[0m  val instrMem = Module(new InstrMemModule)[0m
-[0m[[0m[31merror[0m] [0m[0m                        ^[0m
-[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:43:38: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (9.U)  { switch(io.instr(31)) {  //I-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                     ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:47:38: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (1.U)  { switch(io.instr(31)) {  //I-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                     ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:51:39: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (57.U)  { switch(io.instr(31)) {  //I-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:55:39: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (51.U)  { switch(io.instr(31)) {  //I-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:59:39: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (17.U)  { switch(io.instr(31)) {  //S-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:63:39: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (49.U)  { switch(io.instr(31)) {  //B-TYPE imm[11:0][0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:67:39: overloaded method value is with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool,vr: chisel3.Bool*)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: chisel3.Bool)(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool] <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (v: Iterable[chisel3.Bool])(block: => Any)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.util.SwitchContext[chisel3.Bool][0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
+[0m[[0m[31merror[0m] [0m[0m    is (55.U)  { switch(io.instr(31)) {  //J-TYPE imm[20:1] (SKETCHY)[0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m7 errors found[0m

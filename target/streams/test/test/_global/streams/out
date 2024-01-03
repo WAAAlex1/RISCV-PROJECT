@@ -1,16 +1,36 @@
-[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester, org.scalatest.tools.Framework$$anon$1@75e2a60e, false, [SuiteSelector])[0m
-[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester2, org.scalatest.tools.Framework$$anon$1@75e2a60e, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester, org.scalatest.tools.Framework$$anon$1@27981135, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IFTester2, org.scalatest.tools.Framework$$anon$1@27981135, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IDTester, org.scalatest.tools.Framework$$anon$1@27981135, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIDTester:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIFTester2:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mIF stage[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should pass *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  io_instruction=0 (0x0) did not equal expected=4 (0x4) (lines in IFTester.scala: 40, 30) (IFTester.scala:40)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mID stage[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should pass *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  chisel3.internal.ChiselException: Connection between sink (IDModule.io.imm: IO[SInt<32>]) and source (IDModule.io_imm_?: OpResult[UInt<12>]) failed @: Sink (SInt<32>) and Source (UInt<12>) have different types.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at ... ()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at IDModule.$anonfun$new$11(IDModule.scala:52)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at chisel3.WhenContext.<init>(When.scala:143)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at chisel3.WhenContext.elsewhen(When.scala:114)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at chisel3.util.SwitchContext.is(Conditional.scala:37)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at chisel3.util.SwitchContext.is(Conditional.scala:45)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at IDModule.<init>(IDModule.scala:41)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at IDTester.$anonfun$new$2(IDTester.scala:8)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at ... ()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  ...[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mIFTester:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mIF stage[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mIFTester2:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mIF stage[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 3 seconds, 273 milliseconds.[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 2[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 2, aborted 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 3 seconds, 317 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 3[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 3, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 2, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m*** 2 TESTS FAILED ***[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
 [0m[[0m[0mdebug[0m] [0m[0m	IFTester[0m
-[0m[[0m[0mdebug[0m] [0m[0m	IFTester2[0m
+[0m[[0m[31merror[0m] [0m[0mFailed tests:[0m
+[0m[[0m[31merror[0m] [0m[0m	IDTester[0m
+[0m[[0m[31merror[0m] [0m[0m	IFTester2[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mtest[0m) sbt.TestsFailedException: Tests unsuccessful[0m
