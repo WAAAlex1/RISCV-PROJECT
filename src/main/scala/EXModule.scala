@@ -1,5 +1,6 @@
 import chisel3._
 import chisel3.util._
+import AluOperations._
 
 class EXModule extends Module {
   val io = IO(new Bundle{
@@ -11,7 +12,8 @@ class EXModule extends Module {
     val pc          = Input(UInt(32.W))
     val rdIn        = Input(UInt(5.W))
     val imm         = Input(SInt(32.W))
-    val aluOpSelect  = Input(UInt(4.W))
+    val aluOpSelect = Input(AluOperations())
+    val pcSelect    = Input(Bool()) //Control signal for PC adder (true only if JALR)
 
     //Out
     val branchAddr  = Output(UInt(32.W))
@@ -27,6 +29,7 @@ class EXModule extends Module {
     val memWriteIn  = Input(Bool())
     val regWriteIn  = Input(Bool())
     val memToRegIn  = Input(Bool())
+    val branchCheckIn = Input(Bool())
 
     //Out
     val branchOut   = Output(Bool())
@@ -34,7 +37,7 @@ class EXModule extends Module {
     val memWriteOut = Output(Bool())
     val regWriteOut = Output(Bool())
     val memToRegOut = Output(Bool())
-    val branchCheck = Output(Bool())
+    val branchCheckOut = Output(Bool())
   })
 
   // Pipeline Registers: --------------------------------------------------------
@@ -51,34 +54,52 @@ class EXModule extends Module {
   val memWriteIn  = RegNext(io.memWriteIn)
   val regWriteIn  = RegNext(io.regWriteIn)
   val memToRegIn  = RegNext(io.memToRegIn)
+  val branchCheckIn = RegNext(io.branchCheckIn)
 
   // Logic ----------------------------------------------------------------------------
   //AddSum (Calculate branch address
-  io.branchAddr := (pc.asSInt + imm).asUInt
+  io.branchAddr := Mux( io.pcSelect, pc.asSInt + imm, rs1data + imm).asUInt
 
   //Mux on ALU second input
   val muxALUinput = WireDefault(0.S(32.W))
   muxALUinput := Mux(aluSRC,imm,rs2dataIn)
 
   //ALU
-  //io.branchCheck := false.B
-  //io.aluResult := 0.S
-  io.aluResult := 0.U
-  io.branchCheck := false.B
-  switch(aluOpSelect) //mvp for now with bge, sw, addi and nop(add)
+  io.aluResult := 0.S
+  switch(aluOpSelect) //enum
   {
-    is(0.U){
-      io.aluResult := rs1data + muxALUinput
+    is(ADD){io.aluResult := rs1data + muxALUinput}
+    is(SUB){io.aluResult := rs1data - muxALUinput}
+    is(XOR){io.aluResult := rs1data ^ muxALUinput}
+    is(OR) {io.aluResult := rs1data | muxALUinput}
+    is(AND){io.aluResult := rs1data & muxALUinput}
+    is(SLL){io.aluResult := rs1data << muxALUinput.asUInt} //SInt intepreted as UInt is big and shift too much
+    is(SRL){io.aluResult := ((rs1data.asUInt) >> muxALUinput.asUInt).asSInt} //no msb extend
+    is(SRA){io.aluResult := rs1data >> muxALUinput.asUInt} //msb extend
+    is(SLT){
+      when(rs1data < muxALUinput){
+        io.aluResult := 1.S
+      }.otherwise {
+        io.aluResult := 0.S
+      }
     }
-    is(12.U){
-      io.branchCheck := (rs1data >= muxALUinput)
+    is(SLTU){
+      when(rs1data.asUInt < muxALUinput.asUInt){
+        io.aluResult := 1.S
+      }.otherwise {
+        io.aluResult := 0.S
+      }
     }
+    is(JAL){ io.aluResult := (pc + 4.U).asSInt}
+    is(LUI){ io.aluResult := imm}
+    is(AUIPC){ io.aluResult := (pc.asSInt + imm)}
   }
 
 
   //Outputs ----------------------------------------------------------------------------
   //Control signals:
   io.branchOut := branchIn
+  io.branchCheckOut := branchCheckIn
   io.memReadOut := memReadIn
   io.memWriteOut := memWriteIn
   io.regWriteOut := regWriteIn

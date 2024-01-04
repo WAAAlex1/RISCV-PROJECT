@@ -33,29 +33,10 @@ Dag 3:
     Husk:
         Flyt ALUcontrol ting til IDStage?
 
-        1. 4-bit signal (aluOpSelect) to ALU regarding what operation it needs to execute.
-        	1. Decoded and interpreted in ALU Using a Switch
-
-        	2. Encoding of the 4-bit signal is:
-
-        		0000:  	ADD
-        		0001:	SLL
-        		0010:	SLT
-        		0011:	SLTU
-        		0100:	XOR
-        		0101:	SRL
-        		0110:	OR
-        		0111:	AND
-        		1000:	SUB
-        		1101:	SRA
-
-        		1001:	BEQ
-        		1010:	BNE
-        		1011:	BLT
-        		1100:	BGE
-        		1110:	BLTU
-        		1111:	BGEU
-
-
         2. aluOpSelect created in ID-stage (as this needs logic)
         	1. Based on funct3 and funct7
+
+        3. SPLIT ALU AND BRANCH
+            1. LATER MAYBE MERGE
+
+        We now use enums to decide the ALU operation

@@ -1,7 +1,4 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IDTester.scala:12:27: overloaded method value poke with alternatives:[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: BigInt)Unit <and>[0m
-[0m[[0m[31merror[0m] [0m[0m  (value: chisel3.SInt)Unit[0m
-[0m[[0m[31merror[0m] [0m[0m cannot be applied to (chisel3.UInt)[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.writeRegData.poke(0.U)[0m
-[0m[[0m[31merror[0m] [0m[0m                          ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\EXTester.scala:31:31: not found: value ADD[0m
+[0m[[0m[31merror[0m] [0m[0m      dut.io.aluOpSelect.poke(ADD)[0m
+[0m[[0m[31merror[0m] [0m[0m                              ^[0m
 [0m[[0m[31merror[0m] [0m[0mone error found[0m
