@@ -10,8 +10,8 @@ class EXModule extends Module {
     val rs2dataIn   = Input(SInt(32.W))
     val pc          = Input(UInt(32.W))
     val rdIn        = Input(UInt(5.W))
-    val aluControl  = Input(UInt(4.W))
     val imm         = Input(SInt(32.W))
+    val aluOpSelect  = Input(UInt(4.W))
 
     //Out
     val branchAddr  = Output(UInt(32.W))
@@ -22,7 +22,6 @@ class EXModule extends Module {
     //Control signals:
     //In
     val aluSRC      = Input(Bool())     //not passed further
-    val aluOP       = Input(UInt(2.W))  //not passed further
     val branchIn    = Input(Bool())
     val memReadIn   = Input(Bool())
     val memWriteIn  = Input(Bool())
@@ -36,7 +35,6 @@ class EXModule extends Module {
     val regWriteOut = Output(Bool())
     val memToRegOut = Output(Bool())
     val branchCheck = Output(Bool())
-
   })
 
   // Pipeline Registers: --------------------------------------------------------
@@ -44,11 +42,10 @@ class EXModule extends Module {
   val rs2dataIn   = RegNext(io.rs2dataIn)
   val pc          = RegNext(io.pc)
   val rdIn        = RegNext(io.rdIn)
-  val aluControl  = RegNext(io.aluControl)
   val imm         = RegNext(io.imm)
+  val aluOpSelect  = RegNext(io.aluOpSelect)
 
   val aluSRC      = RegNext(io.aluSRC)
-  val aluOP       = RegNext(io.aluOP)
   val branchIn    = RegNext(io.branchIn)
   val memReadIn   = RegNext(io.memReadIn)
   val memWriteIn  = RegNext(io.memWriteIn)
@@ -63,11 +60,20 @@ class EXModule extends Module {
   val muxALUinput = WireDefault(0.S(32.W))
   muxALUinput := Mux(aluSRC,imm,rs2dataIn)
 
-  //ALU (and ALU control)
+  //ALU
+  //io.branchCheck := false.B
+  //io.aluResult := 0.S
+  io.aluResult := 0.U
   io.branchCheck := false.B
-  io.aluResult := 0.S
-
-
+  switch(aluOpSelect) //mvp for now with bge, sw, addi and nop(add)
+  {
+    is(0.U){
+      io.aluResult := rs1data + muxALUinput
+    }
+    is(12.U){
+      io.branchCheck := (rs1data >= muxALUinput)
+    }
+  }
 
 
   //Outputs ----------------------------------------------------------------------------
@@ -81,5 +87,4 @@ class EXModule extends Module {
   //Data signals:
   io.rdOut := rdIn
   io.rs2DataOut := rs2dataIn
-
 }
