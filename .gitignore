@@ -1,10 +1,21 @@
 # Default ignored files
-/shelf/
-/.idea/
-/.bsp/
-/.target/
-/.test_run_dir/
-/.project/
+/.sbt
+/.bsp
+/.vscode
+/.metals
+/.bloop
+/.cache
+/.idea
+/project
+/target
+/test_run_dir
+/generated
+/build
+/quartus
+!/quartus/*.qsf
+!/quartus/*.qpf
 
+*.out
+*.bin
 
 
