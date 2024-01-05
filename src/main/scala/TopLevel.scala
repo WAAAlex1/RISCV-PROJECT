@@ -10,6 +10,7 @@ class TopLevel extends Module {
     val wrEna   = Input(Bool())
 
     val regFile = Output(Vec(32,SInt(32.W)))
+    val pc      = Output(UInt(32.W))
   })
   // ------------------------------------------------------------------------------
   // Clk
@@ -73,6 +74,7 @@ class TopLevel extends Module {
   ifModule.io.wrEna  := io.wrEna
 
   io.regFile := idModule.io.regFile
+  io.pc      := ifModule.io.pc //for debugging
 
   // ------------------------------------------------------------------------------
 }

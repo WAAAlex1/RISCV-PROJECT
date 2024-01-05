@@ -15,7 +15,7 @@ class IDModule extends Module {
     val writeRegIdx  = Input(UInt(5.W))
     val regWriteIn    = Input(Bool())
     val writeRegData  = Input(SInt(32.W))
-    val instr         = Input(UInt(32.W))
+    val instr         = Input(UInt(32.W)) //dont regNext because from memory
 
     val rs1data       = Output(SInt(32.W))
     val rs2data       = Output(SInt(32.W))
@@ -44,20 +44,19 @@ class IDModule extends Module {
   //-----------------------------------------------------------------------------
   //Pipeline Registers
   val pcIn = RegNext(io.pcIn)
-  val instr = RegNext(io.instr)
 
   //RegisterFile
   val registerFile = Reg(Vec(32,SInt(32.W)))
   registerFile(0) := 0.S //x0 = 0
-  val rs1data = registerFile(instr(19, 15))
-  val rs2data = registerFile(instr(24, 20))
+  val rs1data = registerFile(io.instr(19, 15))
+  val rs2data = registerFile(io.instr(24, 20))
 
   //control signals base-case:
   io.aluSRC := false.B
   io.branch := false.B
   io.memRead := false.B
   io.memWrite := false.B
-  io.regWriteOut := false.B
+  io.regWriteOut := true.B
   io.memToReg := false.B
   io.pcSelect := false.B
   io.memSize := 0.U
@@ -77,7 +76,7 @@ class IDModule extends Module {
   //When processing J-TYPE - ignore first 2 bits as the least value we increment PC by is 4.
   //(Allows for minimal synthesis of opcode using a single 6-bit LUT)
   io.imm := 0.S //INIT io.imm default value 0
-  switch(instr(6,1)) {
+  switch(io.instr(6,1)) {
     is (25.U) { //R-TYPE 011001 (NO IMM) / Normal add, sub, xor ... instructions
       aluOPType := 0.U //alu control signal
 
@@ -90,7 +89,7 @@ class IDModule extends Module {
       io.memToReg := false.B
     }
     is (9.U)  { //I-TYPE imm[11:0] 001001 / normal imm instructions
-      io.imm := ((instr(31,20) ## "hFFFFF".U).asSInt >> 20)
+      io.imm := ((io.instr(31,20) ## "hFFFFF".U).asSInt >> 20)
       aluOPType := 1.U//alu control signal
 
       //Control signals:
@@ -102,7 +101,7 @@ class IDModule extends Module {
       io.memToReg := false.B
     }
     is (1.U)  { //I-TYPE imm[11:0] 000001 / load instructions
-      io.imm := (instr(31,20) ## "hFFFFF".U).asSInt >> 20
+      io.imm := (io.instr(31,20) ## "hFFFFF".U).asSInt >> 20
       aluOPType := 2.U//alu control signal
 
       //Control signals:
@@ -115,15 +114,15 @@ class IDModule extends Module {
     }
     is (57.U) { //I-TYPE imm[11:0] 111001 / ecall / ebreak
       //No ALU control needed in this case
-      io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
+      io.imm := ( io.instr(31,20) ## "hFFFFF".U ).asSInt >> 20
     }
     is (51.U) { //I-TYPE imm[11:0] 110011 / jalr
       //No ALU control needed in this case
-      io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
+      io.imm := ( io.instr(31,20) ## "hFFFFF".U ).asSInt >> 20
       io.pcSelect := true.B //Control signal for PC adder in case of JALR
     }
     is (17.U) {  //S-TYPE imm[11:5][4:0] 010001 / save instruction
-      io.imm := ( instr(31,25) ## instr(11,7) ## "hFFFFF".U ).asSInt >> 20
+      io.imm := ( io.instr(31,25) ## io.instr(11,7) ## "hFFFFF".U ).asSInt >> 20
       aluOPType := 2.U//alu control signal
 
       //Control signals:
@@ -135,7 +134,7 @@ class IDModule extends Module {
       io.memToReg := false.B //dont care
     }
     is (49.U) { //B-TYPE imm[12|10:5][4:1|11] 110001 / branch instruction
-      io.imm := ( instr(31) ## instr(7) ## instr(30,25) ## instr(11,8) ## "hFFFFF".U ).asSInt >> 19
+      io.imm := ( io.instr(31) ## io.instr(7) ## io.instr(30,25) ## io.instr(11,8) ## "hFFFFF".U ).asSInt >> 19
 
       //Control signals:
       io.aluSRC := false.B
@@ -146,17 +145,17 @@ class IDModule extends Module {
       io.memToReg := false.B //dont care
     }
     is (55.U) { //J-TYPE jal
-      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,22) ## "hFFF1".U ).asSInt >> 11
+      io.imm := ( io.instr(31) ## io.instr(19,12) ## io.instr(20) ## io.instr(30,22) ## "hFFF1".U ).asSInt >> 11
     }
-    is (27.U) { io.imm := ( instr | "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
-    is (11.U) { io.imm := ( instr | "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
+    is (27.U) { io.imm := ( io.instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
+    is (11.U) { io.imm := ( io.instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
   }
 
   //ALU control
   io.aluOpSelect := ADD
   switch(aluOPType){
     is(0.U){ //normal arithmetic&logic R
-      switch(instr(30) ## instr(14,12)){ //switch on 6th bit of funct7 and funct3
+      switch(io.instr(30) ## io.instr(14,12)){ //switch on 6th bit of funct7 and funct3
         is("b0000".U){io.aluOpSelect := ADD}
         is("b1000".U){io.aluOpSelect := SUB}
         is("b0100".U){io.aluOpSelect := XOR}
@@ -170,7 +169,7 @@ class IDModule extends Module {
       }
     }
     is(1.U){ //I-Instructions arithmetic&logic
-      switch(instr(14,12)){ //switch on funct3
+      switch(io.instr(14,12)){ //switch on funct3
         is("b000".U){io.aluOpSelect := ADD}
         is("b100".U){io.aluOpSelect := XOR}
         is("b110".U){io.aluOpSelect := OR }
@@ -183,11 +182,11 @@ class IDModule extends Module {
     }
     is(2.U){ //LOAD AND STORE Instructions
       io.aluOpSelect := ADD
-      io.memSize := instr(14,12) //decides if mem takes byte, halfword or word
+      io.memSize := io.instr(14,12) //decides if mem takes byte, halfword or word
     }
   }
   //Special cases - found easiest from opcode
-  switch(instr(6,1)){
+  switch(io.instr(6,1)){
     is("b110111".U){io.aluOpSelect := JAL}
     is("b110011".U){io.aluOpSelect := JAL}
     is("b011011".U){io.aluOpSelect := LUI}
@@ -196,7 +195,7 @@ class IDModule extends Module {
 
   //BranchCheck logic. (this just assumes branch and checks for the conditions)
   io.branchCheck := false.B
-  switch(instr(14,12))
+  switch(io.instr(14,12))
   {
     is(0.U){ //beq
       io.branchCheck := (rs1data === rs2data)
@@ -227,10 +226,10 @@ class IDModule extends Module {
   io.pcOut := pcIn
   io.rs1data := rs1data
   io.rs2data := rs2data
-  io.rd := instr(11,7)
+  io.rd := io.instr(11,7)
   io.regFile := registerFile
 
   //ADDED FOR TESTING, REMOVE
-  io.aluControl := instr(30) ## instr(14,12)
+  io.aluControl := io.instr(30) ## io.instr(14,12)
   io.aluOPType := aluOPType
 }

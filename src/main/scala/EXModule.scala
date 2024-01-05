@@ -77,6 +77,7 @@ class EXModule extends Module {
     is(XOR){io.aluResult := rs1data ^ muxALUinput}
     is(OR) {io.aluResult := rs1data | muxALUinput}
     is(AND){io.aluResult := rs1data & muxALUinput}
+    //BUGHERE!!
     is(SLL){io.aluResult := rs1data << ((muxALUinput.asUInt)(4,0))} //SInt intepreted as UInt is big and shift too much
     is(SRL){io.aluResult := ((rs1data.asUInt) >> muxALUinput.asUInt).asSInt} //no msb extend
     is(SRA){io.aluResult := rs1data >> muxALUinput.asUInt} //msb extend
@@ -95,7 +96,7 @@ class EXModule extends Module {
       }
     }
     is(JAL){ io.aluResult := (pc + 4.U).asSInt}
-    is(LUI){ io.aluResult := imm}
+    is(LUI){io.aluResult := imm}
     is(AUIPC){ io.aluResult := (pc.asSInt + imm)}
   }
 

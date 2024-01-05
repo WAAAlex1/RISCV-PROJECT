@@ -11,11 +11,13 @@ class IFTester extends AnyFlatSpec with
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke(1.U)
       dut.io.wrEna.poke(true.B)
+
       dut.clock.step(1)
       dut.io.wrAddr.poke(2.U)
       dut.io.wrData.poke(2.U)
       dut.io.instruction.expect(1.U)
       println("pc after 1 clockcycles is:" + dut.io.pc.peekInt())
+
       dut.clock.step(1)
       dut.io.wrEna.poke(false.B)
       dut.io.instruction.expect(2.U)

@@ -16,7 +16,7 @@ class IFModule extends Module {
 
   //-----------------------------------------------------------------------------
   //INITIALIZE WIRES AND MODULES
-  val pc = RegInit(0.U(32.W))
+  val pc = RegInit("hFFFFFFFF".U(32.W))
   val instrMem = Module(new Memory(1024,32))
   instrMem.io.wrEna := io.wrEna
   instrMem.io.wrAddr := io.wrAddr
