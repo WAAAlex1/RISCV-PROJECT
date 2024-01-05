@@ -7,12 +7,11 @@ class TopLevelTester extends AnyFlatSpec with
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
       //Insert instruciton into the instruction memory:
-      dut.io.wrAddr.poke(3.U)
+      dut.io.wrAddr.poke(2.U)
       dut.io.wrData.poke("h00100093".U) //addi x1 x0 1
       dut.io.wrEna.poke(true.B)
       dut.clock.step(1)
       dut.io.wrEna.poke(false.B)
-      dut.clock.step(1)
       //Instruction is read into IF
       dut.clock.step(1)
       //ID
@@ -20,6 +19,7 @@ class TopLevelTester extends AnyFlatSpec with
       //EX
       dut.clock.step(1)
       //MEM
+      println("x1 value during MEM is: " + dut.io.regFile(1).peekInt())
       dut.clock.step(1)
       //Writing to the registers becomes visible now?
       dut.clock.step(1)
