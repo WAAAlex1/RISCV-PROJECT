@@ -1,13 +1,11 @@
-[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IDTester, org.scalatest.tools.Framework$$anon$1@673e8d2a, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(IDTester, org.scalatest.tools.Framework$$anon$1@2bcdc0f1, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mIDTester:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mID stage[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should pass *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  io_aluOpSelect=AluOperations.SUB (1, 0x1) did not equal expected=AluOperations.ADD (0, 0x0) (lines in IDTester.scala: 28, 9) (IDTester.scala:28)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 4 seconds, 209 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should pass[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 7 seconds, 742 milliseconds.[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 1[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m*** 1 TEST FAILED ***[0m[0m
-[0m[[0m[31merror[0m] [0m[0mFailed tests:[0m
-[0m[[0m[31merror[0m] [0m[0m	IDTester[0m
-[0m[[0m[31merror[0m] [0m[0m(Test / [31mtestOnly[0m) sbt.TestsFailedException: Tests unsuccessful[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	IDTester[0m

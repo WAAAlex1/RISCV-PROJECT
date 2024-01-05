@@ -30,8 +30,9 @@ class EXTester2 extends AnyFlatSpec with
       dut.io.rdIn.poke(0.U)
       dut.io.imm.poke(3.S)
       dut.io.aluOpSelect.poke(ADD)
+      dut.io.pcSelect.poke(false.B)
 
-      dut.io.aluSRC.poke(true.B) //use imm
+      dut.io.aluSRC.poke(false.B) //use rs2
       dut.io.branchIn.poke(false.B)
       dut.io.memReadIn.poke(false.B)
       dut.io.memWriteIn.poke(false.B)
@@ -40,9 +41,10 @@ class EXTester2 extends AnyFlatSpec with
       dut.io.branchCheckIn.poke(false.B)
 
       dut.clock.step(1)
-      dut.io.aluResult.expect(4.S)
+
+      dut.io.aluResult.expect(3.S)
       dut.io.rs2DataOut.expect(2.S)
-      dut.io.branchAddr.expect(5.U)
+      dut.io.branchAddr.expect(11.U)
     }
   }
 }

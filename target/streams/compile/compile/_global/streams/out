@@ -1,4 +1,6 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\EXModule.scala:76:52: value zext is not a member of chisel3.SInt[0m
-[0m[[0m[31merror[0m] [0m[0m    is(SLL){io.aluResult := rs1data << muxALUinput.zext}[0m
-[0m[[0m[31merror[0m] [0m[0m                                                   ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\main\scala\IDModule.scala:180:37: missing argument list for method := in class Data[0m
+[0m[[0m[31merror[0m] [0m[0mUnapplied methods are only converted to functions when a function type is expected.[0m
+[0m[[0m[31merror[0m] [0m[0mYou can make this conversion explicit by writing `:= _` or `:=(_)(_,_)` instead of `:=`.[0m
+[0m[[0m[31merror[0m] [0m[0m        is("b101".U){io.aluOpSelect := }//false=error[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
 [0m[[0m[31merror[0m] [0m[0mone error found[0m

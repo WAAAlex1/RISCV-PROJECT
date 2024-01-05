@@ -58,7 +58,7 @@ class EXModule extends Module {
 
   // Logic ----------------------------------------------------------------------------
   //AddSum (Calculate branch address
-  io.branchAddr := Mux( io.pcSelect, pc.asSInt + imm, rs1data + imm).asUInt
+  io.branchAddr := Mux( io.pcSelect, rs1data + imm, pc.asSInt + imm).asUInt
 
   //Mux on ALU second input
   val muxALUinput = WireDefault(0.S(32.W))
@@ -73,7 +73,7 @@ class EXModule extends Module {
     is(XOR){io.aluResult := rs1data ^ muxALUinput}
     is(OR) {io.aluResult := rs1data | muxALUinput}
     is(AND){io.aluResult := rs1data & muxALUinput}
-    is(SLL){io.aluResult := rs1data << muxALUinput.asUInt} //SInt intepreted as UInt is big and shift too much
+    is(SLL){io.aluResult := rs1data << ((muxALUinput.asUInt)(4,0))} //SInt intepreted as UInt is big and shift too much
     is(SRL){io.aluResult := ((rs1data.asUInt) >> muxALUinput.asUInt).asSInt} //no msb extend
     is(SRA){io.aluResult := rs1data >> muxALUinput.asUInt} //msb extend
     is(SLT){

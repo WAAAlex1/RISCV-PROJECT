@@ -35,8 +35,8 @@ class IDModule extends Module {
     val branchCheck   = Output(Bool())
 
     //Temp outputs for testing
-    val aluControl = Output(UInt(4.W)) //bit 30 is used for funct7, the rest is funct3
-    val aluOPType = Output(UInt(1.W))
+    val aluControl = Output(UInt(4.W)) //MSB is used for funct7, the rest is funct3
+    val aluOPType = Output(UInt(2.W))
   })
 
   //-----------------------------------------------------------------------------
@@ -69,8 +69,7 @@ class IDModule extends Module {
   //Encoding of aluOP:
   //  0 = arithmetic&logic R instructions and imm arithmetic&logic I instructions
   //  1 = Load I instructions and store S instructions
-  val aluControl = instr(30) ## instr(14,12) //bit 30 is used for funct7, the rest is funct3
-  val aluOPType = WireDefault(0.U(1.W))
+  val aluOPType = WireDefault(0.U(2.W))
 
 
   // IMM GEN
@@ -92,7 +91,7 @@ class IDModule extends Module {
     }
     is (9.U)  { //I-TYPE imm[11:0] 001001 / normal imm instructions
       io.imm := ((instr(31,20) ## "hFFFFF".U).asSInt >> 20)
-      aluOPType := 0.U//alu control signal
+      aluOPType := 1.U//alu control signal
 
       //Control signals:
       io.aluSRC := true.B
@@ -104,7 +103,7 @@ class IDModule extends Module {
     }
     is (1.U)  { //I-TYPE imm[11:0] 000001 / load instructions
       io.imm := (instr(31,20) ## "hFFFFF".U).asSInt >> 20
-      aluOPType := 1.U//alu control signal
+      aluOPType := 2.U//alu control signal
 
       //Control signals:
       io.aluSRC := true.B
@@ -125,7 +124,7 @@ class IDModule extends Module {
     }
     is (17.U) {  //S-TYPE imm[11:5][4:0] 010001 / save instruction
       io.imm := ( instr(31,25) ## instr(11,7) ## "hFFFFF".U ).asSInt >> 20
-      aluOPType := 1.U//alu control signal
+      aluOPType := 2.U//alu control signal
 
       //Control signals:
       io.aluSRC := true.B
@@ -146,18 +145,18 @@ class IDModule extends Module {
       io.regWriteOut := false.B
       io.memToReg := false.B //dont care
     }
-    is (55.U) { io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,22) ## "hFFF1".U ).asSInt >> 11} //J-TYPE jal
+    is (55.U) { //J-TYPE jal
+      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,22) ## "hFFF1".U ).asSInt >> 11
+    }
     is (27.U) { io.imm := ( instr | "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
     is (11.U) { io.imm := ( instr | "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
   }
 
   //ALU control
-  // Switch on aluOP (type of operation ALU should perform)
-  // then Switch on aluControl (specific instruction ALU should perform)
   io.aluOpSelect := ADD
   switch(aluOPType){
-    is(0.U){ //normal arithmetic&logic R and I
-      switch(aluControl){
+    is(0.U){ //normal arithmetic&logic R
+      switch(instr(30) ## instr(14,12)){ //switch on 6th bit of funct7 and funct3
         is("b0000".U){io.aluOpSelect := ADD}
         is("b1000".U){io.aluOpSelect := SUB}
         is("b0100".U){io.aluOpSelect := XOR}
@@ -170,13 +169,26 @@ class IDModule extends Module {
         is("b0011".U){io.aluOpSelect := SLTU}
       }
     }
-    is(1.U){ //load and store
+    is(1.U){ //I-Instructions arithmetic&logic
+      switch(instr(14,12)){ //switch on funct3
+        is("b000".U){io.aluOpSelect := ADD}
+        is("b100".U){io.aluOpSelect := XOR}
+        is("b110".U){io.aluOpSelect := OR }
+        is("b111".U){io.aluOpSelect := AND}
+        is("b001".U){io.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SLL, ADD)}//false=error
+        is("b101".U){io.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SRL, Mux(io.imm(11,5)==="b0100000".U, SRA, ADD))} //false=error
+        is("b010".U){io.aluOpSelect := SLT}
+        is("b011".U){io.aluOpSelect := SLTU}
+      }
+    }
+    is(2.U){ //LOAD AND STORE Instructions
       io.aluOpSelect := ADD
     }
   }
+  //Special cases - found easiest from opcode
   switch(instr(6,1)){
-    is("b110111".U){io.aluOpSelect := JAL;}
-    is("b110011".U){io.aluOpSelect := JAL;}
+    is("b110111".U){io.aluOpSelect := JAL}
+    is("b110011".U){io.aluOpSelect := JAL}
     is("b011011".U){io.aluOpSelect := LUI}
     is("b001011".U){io.aluOpSelect := AUIPC}
   }
@@ -217,6 +229,6 @@ class IDModule extends Module {
   io.rd := instr(11,7)
 
   //ADDED FOR TESTING, REMOVE
-  io.aluControl := aluControl
+  io.aluControl := instr(30) ## instr(14,12)
   io.aluOPType := aluOPType
 }
