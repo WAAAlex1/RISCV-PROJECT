@@ -6,7 +6,6 @@ General outline:
 
     Split Memory
 
-
 Dag 1:
     Done:
         Git
@@ -31,7 +30,7 @@ Dag 2:
         
 Dag 3:
     Husk:
-        Flyt ALUcontrol ting til IDStage?
+        Flyt ALUcontrol ting til IDStage? yes we did that
 
         2. aluOpSelect created in ID-stage (as this needs logic)
         	1. Based on funct3 and funct7
@@ -40,3 +39,23 @@ Dag 3:
             1. LATER MAYBE MERGE
 
         We now use enums to decide the ALU operation
+
+Dag 4:
+    Done:
+        EXStage
+        Næsten MEMStage (mangler memSize som er relateret til spørgsmålet nedenunder)
+
+    Husk:
+        Lav controlsignaler til at bestemme om det er 1,2 eller 4 byte der skal skrives/læses fra memor
+
+        Det burde være muligt for os at bestemme os for at branche allerede i ID
+
+        Bundles, bundles, bundles! Please implement bundles.
+
+        Clean up the GIT -
+
+    Questions:
+        If our memory is in byte elements then it would take 4 clockcycles to read a word? Does this mean we
+        need the memory to be made of word-elements or are we missing something?
+
+

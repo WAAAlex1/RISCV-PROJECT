@@ -1,4 +1,7 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\EXTester.scala:31:31: not found: value ADD[0m
-[0m[[0m[31merror[0m] [0m[0m      dut.io.aluOpSelect.poke(ADD)[0m
-[0m[[0m[31merror[0m] [0m[0m                              ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:9:14: value pcScr is not a member of chisel3.Bundle{val pcSrc: chisel3.Bool; val branchAddr: chisel3.UInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
+[0m[[0m[31merror[0m] [0m[0m      dut.io.pcScr.poke(false.B)[0m
+[0m[[0m[31merror[0m] [0m[0m             ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\alexa\OneDrive - Danmarks Tekniske Universitet\DTU\3. Semester\02114\RISCV PROJECT\src\test\scala\IFTester.scala:31:14: value pcScr is not a member of chisel3.Bundle{val pcSrc: chisel3.Bool; val branchAddr: chisel3.UInt; val instruction: chisel3.UInt; val pc: chisel3.UInt; val wrAddr: chisel3.UInt; val wrData: chisel3.UInt; val wrEna: chisel3.Bool}[0m
+[0m[[0m[31merror[0m] [0m[0m      dut.io.pcScr.poke(true.B)[0m
+[0m[[0m[31merror[0m] [0m[0m             ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m

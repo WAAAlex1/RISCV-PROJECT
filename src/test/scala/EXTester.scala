@@ -7,15 +7,24 @@ class EXTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "EX stage" should "pass" in {
     test(new EXModule) { dut =>
+      dut.io.pcSelect.poke(false.B)
       dut.io.rs1data.poke(0.S)
       dut.io.rs2dataIn.poke(0.S)
       dut.io.pc.poke(100.U)
       dut.io.rdIn.poke(0.U)
-      //dut.io.aluOpSelect.poke(0.U)
       dut.io.imm.poke(-50.S)
       dut.clock.step(1)
       dut.io.branchAddr.expect(50.U)
+
+      dut.io.pcSelect.poke(true.B)
+      dut.io.rs1data.poke(12.S)
+      dut.io.rs2dataIn.poke(0.S)
+      dut.io.pc.poke(100.U)
+      dut.io.rdIn.poke(0.U)
+      dut.io.imm.poke(24.S)
+
       dut.clock.step(1)
+      dut.io.branchAddr.expect(36.U)
     }
   }
 }

@@ -12,7 +12,7 @@ import AluOperations._
 class IDModule extends Module {
   val io = IO(new Bundle{
     val pcIn          = Input(UInt(32.W))
-    val writeRegAddr  = Input(UInt(5.W))
+    val writeRegIdx  = Input(UInt(5.W))
     val regWriteIn    = Input(Bool())
     val writeRegData  = Input(SInt(32.W))
     val instr         = Input(UInt(32.W))
@@ -24,6 +24,7 @@ class IDModule extends Module {
     val imm           = Output(SInt(32.W))
     val aluOpSelect   = Output(AluOperations())
     val pcSelect      = Output(Bool()) //Control signal for PC adder (true only if JALR)
+    val regFile       = Output(Vec(32,SInt(32.W)))
 
     //Control signals?
     val aluSRC        = Output(Bool())
@@ -33,6 +34,7 @@ class IDModule extends Module {
     val regWriteOut   = Output(Bool())
     val memToReg      = Output(Bool())
     val branchCheck   = Output(Bool())
+    val memSize       = Output(UInt(3.W))
 
     //Temp outputs for testing
     val aluControl = Output(UInt(4.W)) //MSB is used for funct7, the rest is funct3
@@ -42,9 +44,6 @@ class IDModule extends Module {
   //-----------------------------------------------------------------------------
   //Pipeline Registers
   val pcIn = RegNext(io.pcIn)
-  val writeRegAddr = RegNext(io.writeRegAddr)
-  val regWriteIn = RegNext(io.regWriteIn)
-  val writeRegData = RegNext(io.writeRegData)
   val instr = RegNext(io.instr)
 
   //RegisterFile
@@ -61,6 +60,7 @@ class IDModule extends Module {
   io.regWriteOut := false.B
   io.memToReg := false.B
   io.pcSelect := false.B
+  io.memSize := 0.U
 
   //ADDED FOR TESTING, REMOVE
   io.aluControl := 0.U
@@ -183,6 +183,7 @@ class IDModule extends Module {
     }
     is(2.U){ //LOAD AND STORE Instructions
       io.aluOpSelect := ADD
+      io.memSize := instr(14,12) //decides if mem takes byte, halfword or word
     }
   }
   //Special cases - found easiest from opcode
@@ -218,8 +219,8 @@ class IDModule extends Module {
   }
 
   //Reg write
-  when(regWriteIn){
-    registerFile(writeRegAddr) := writeRegData
+  when(io.regWriteIn){
+    registerFile(io.writeRegIdx) := io.writeRegData
   }
 
   //IO
@@ -227,6 +228,7 @@ class IDModule extends Module {
   io.rs1data := rs1data
   io.rs2data := rs2data
   io.rd := instr(11,7)
+  io.regFile := registerFile
 
   //ADDED FOR TESTING, REMOVE
   io.aluControl := instr(30) ## instr(14,12)

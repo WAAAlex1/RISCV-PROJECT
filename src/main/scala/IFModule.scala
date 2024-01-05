@@ -2,11 +2,13 @@ import chisel3._
 
 class IFModule extends Module {
   val io = IO(new Bundle{
-    val pcScr         = Input(Bool())
+    val pcSrc         = Input(Bool())
     val branchAddr    = Input(UInt(32.W))
+
     val instruction   = Output(UInt(32.W))
     val pc            = Output(UInt(32.W))
 
+    //Signals for writing to instr-mem, currently only used in tests to fill the instr-mem
     val wrAddr        = Input(UInt(10.W))
     val wrData        = Input(UInt(32.W))
     val wrEna         = Input(Bool())
@@ -26,7 +28,7 @@ class IFModule extends Module {
 
   //Mux
   val pcMux = WireDefault(0.U(32.W))
-  pcMux := Mux(io.pcScr, io.branchAddr >> 2, pcAdded) //Divide branchaddr by 4 because 4 times too big
+  pcMux := Mux(io.pcSrc, io.branchAddr >> 2, pcAdded) //Divide branchaddr by 4 because 4 times too big
   pc := pcMux
 
   //USE MEM

@@ -9,7 +9,7 @@ class IDTester extends AnyFlatSpec with
     test(new IDModule) { dut =>
       //Input
       dut.io.pcIn.poke(0.U)
-      dut.io.writeRegAddr.poke(0.U)
+      dut.io.writeRegIdx.poke(0.U)
       dut.io.writeRegData.poke(0.S)
       dut.io.regWriteIn.poke(false.B)
       dut.io.instr.poke("hf150_8113".U) //addi x2, x1, -235

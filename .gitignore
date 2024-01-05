@@ -1,5 +1,10 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
+/.idea/
+/.bsp/
+/.target/
+/.test_run_dir/
+/.project/
+
 
 

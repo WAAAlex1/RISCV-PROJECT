@@ -23,6 +23,7 @@ class MEMModule extends Module {
     val regWriteIn   = Input(Bool())
     val memToReg     = Input(Bool())
     val branchCheck  = Input(Bool())
+    val memSize      = Input(UInt(3.W))
 
     //Out
     val regWriteOut  = Output(Bool())
@@ -37,18 +38,19 @@ class MEMModule extends Module {
   val regWriteIn = RegNext(io.regWriteIn) //
   val memToReg = RegNext(io.memToReg)
   val branchAddrIn = RegNext(io.branchAddrIn)
+  val memSize = RegNext(io.memSize) //Regnext because its needed after memory is done fetching
 
   //pcSrc:
   io.pcSrc := (branch & branchCheck)
 
   //On chip memory:
   val memory = Module(new Memory(1024,8))
-  memory.io.rdAddr := io.aluResult //connect to non-regnext'ed aluresult
-  memory.io.wrAddr := io.aluResult //connect to non-regnext'ed aluresult
-  memory.io.wrData := io.rs2Data //non-regnext'ed ?? idk which one, maybe should be good
+  memory.io.rdAddr := io.aluResult.asUInt //connect to non-regnext'ed aluresult
+  memory.io.wrAddr := io.aluResult.asUInt //connect to non-regnext'ed aluresult
+  memory.io.wrData := io.rs2Data.asUInt(7,0) //non-regnext'ed ?? idk which one, maybe should be good
   memory.io.wrEna := io.memWrite
   val memOutput = WireDefault(0.S(32.W))
-  memOutput := memory.io.rdData
+  memOutput := memory.io.rdData.asSInt
 
   //Write back:
   io.regWriteData := Mux(memToReg,memOutput,aluResult) //regnext'ed aluresult

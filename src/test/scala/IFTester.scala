@@ -6,7 +6,7 @@ class IFTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "IF stage" should "pass" in {
     test(new IFModule) { dut =>
-      dut.io.pcScr.poke(false.B)
+      dut.io.pcSrc.poke(false.B)
       dut.io.branchAddr.poke(0.U)
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke(1.U)
@@ -28,7 +28,7 @@ class IFTester2 extends AnyFlatSpec with
   ChiselScalatestTester {
   "IF stage" should "pass" in {
     test(new IFModule) { dut =>
-      dut.io.pcScr.poke(true.B)
+      dut.io.pcSrc.poke(true.B)
       dut.io.branchAddr.poke(400.U)
       dut.io.wrAddr.poke(100.U)
       dut.io.wrData.poke(4.U)

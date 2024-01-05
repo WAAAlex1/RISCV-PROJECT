@@ -30,6 +30,7 @@ class EXModule extends Module {
     val regWriteIn  = Input(Bool())
     val memToRegIn  = Input(Bool())
     val branchCheckIn = Input(Bool())
+    val memSizeIn     = Input(UInt(3.W))
 
     //Out
     val branchOut   = Output(Bool())
@@ -38,6 +39,7 @@ class EXModule extends Module {
     val regWriteOut = Output(Bool())
     val memToRegOut = Output(Bool())
     val branchCheckOut = Output(Bool())
+    val memSizeOut     = Output(UInt(3.W))
   })
 
   // Pipeline Registers: --------------------------------------------------------
@@ -55,10 +57,12 @@ class EXModule extends Module {
   val regWriteIn  = RegNext(io.regWriteIn)
   val memToRegIn  = RegNext(io.memToRegIn)
   val branchCheckIn = RegNext(io.branchCheckIn)
+  val pcSelect    = RegNext(io.pcSelect)
+  val memSizeIn   = RegNext(io.memSizeIn)
 
   // Logic ----------------------------------------------------------------------------
   //AddSum (Calculate branch address
-  io.branchAddr := Mux( io.pcSelect, rs1data + imm, pc.asSInt + imm).asUInt
+  io.branchAddr := Mux( pcSelect, rs1data + imm, pc.asSInt + imm).asUInt
 
   //Mux on ALU second input
   val muxALUinput = WireDefault(0.S(32.W))
@@ -104,6 +108,7 @@ class EXModule extends Module {
   io.memWriteOut := memWriteIn
   io.regWriteOut := regWriteIn
   io.memToRegOut := memToRegIn
+  io.memSizeOut := memSizeIn
 
   //Data signals:
   io.rdOut := rdIn
