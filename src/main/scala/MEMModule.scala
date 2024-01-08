@@ -24,6 +24,9 @@ class MEMModule extends Module {
     val memToReg     = Input(Bool())
     val branchCheck  = Input(Bool())
     val memSize      = Input(UInt(3.W))
+    */
+    //Replace with Bundle:
+    val memControl = Input(new MEMBundle)
 
     //Out
     val regWriteOut  = Output(Bool())
@@ -31,17 +34,11 @@ class MEMModule extends Module {
   })
 
   //Registers on the inputs that dont go through memory:
-  val aluResult = RegNext(io.aluResult) //Both through memory AND past it in parallel
   val rdIn = RegNext(io.rdIn)
-  val branchCheck = RegNext(io.branchCheck)
-  val branch = RegNext(io.branch)
-  val regWriteIn = RegNext(io.regWriteIn) //
-  val memToReg = RegNext(io.memToReg)
-  val branchAddrIn = RegNext(io.branchAddrIn)
-  val memSize = RegNext(io.memSize) //Regnext because its needed after memory is done fetching
-
-  //pcSrc:
-  io.pcSrc := (branch & branchCheck)
+  val aluResult = RegNext(io.aluResult) //Both through memory AND past it in parallel
+  val regWrite = RegNext(io.memControl.regWrite) //
+  val memToReg = RegNext(io.memControl.memToReg)
+  val memSize = RegNext(io.memControl.memSize) //Regnext because its needed after memory is done fetching
 
   //On chip memory:
   val memory = Module(new Memory(1024,8))
@@ -57,6 +54,5 @@ class MEMModule extends Module {
 
   //Other outputs:
   io.rdOut := rdIn
-  io.regWriteOut := regWriteIn
-  io.branchAddrOut := branchAddrIn
+  io.regWriteOut := regWrite
 }

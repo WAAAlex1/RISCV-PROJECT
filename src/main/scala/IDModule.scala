@@ -11,12 +11,14 @@ import AluOperations._
 
 class IDModule extends Module {
   val io = IO(new Bundle{
+    //Data in
     val pcIn          = Input(UInt(32.W))
     val writeRegIdx  = Input(UInt(5.W))
     val regWriteIn    = Input(Bool())
     val writeRegData  = Input(SInt(32.W))
     val instr         = Input(UInt(32.W)) //dont regNext because from memory
 
+    //Data Out
     val rs1data       = Output(SInt(32.W))
     val rs2data       = Output(SInt(32.W))
     val pcOut         = Output(UInt(32.W))
@@ -26,15 +28,19 @@ class IDModule extends Module {
     val pcSelect      = Output(Bool()) //Control signal for PC adder (true only if JALR)
     val regFile       = Output(Vec(32,SInt(32.W)))
 
-    //Control signals?
+    //Control signals Out
+    /*
     val aluSRC        = Output(Bool())
-    val branch        = Output(Bool())
     val memRead       = Output(Bool())
     val memWrite      = Output(Bool())
     val regWriteOut   = Output(Bool())
     val memToReg      = Output(Bool())
     val branchCheck   = Output(Bool())
     val memSize       = Output(UInt(3.W))
+    val aluOpSelect   = Output(AluOperations())
+    */
+    //Replace with Bundle:
+    val exControl = Output(new EXBundle)
 
     //Temp outputs for testing
     val aluControl = Output(UInt(4.W)) //MSB is used for funct7, the rest is funct3
@@ -126,12 +132,12 @@ class IDModule extends Module {
       aluOPType := 2.U//alu control signal
 
       //Control signals:
-      io.aluSRC := true.B
-      io.branch := false.B
-      io.memRead := false.B
-      io.memWrite := true.B
-      io.regWriteOut := false.B
-      io.memToReg := false.B //dont care
+      io.exControl.aluSRC := true.B
+      branch := false.B
+      io.exControl.sigBundle.memRead := false.B
+      io.exControl.sigBundle.memWrite := true.B
+      io.exControl.sigBundle.regWrite := false.B
+      io.exControl.sigBundle.memToReg := false.B //dont care
     }
     is (49.U) { //B-TYPE imm[12|10:5][4:1|11] 110001 / branch instruction
       io.imm := ( io.instr(31) ## io.instr(7) ## io.instr(30,25) ## io.instr(11,8) ## "hFFFFF".U ).asSInt >> 19
@@ -152,7 +158,7 @@ class IDModule extends Module {
   }
 
   //ALU control
-  io.aluOpSelect := ADD
+  io.exControl.aluOpSelect := ADD
   switch(aluOPType){
     is(0.U){ //normal arithmetic&logic R
       switch(io.instr(30) ## io.instr(14,12)){ //switch on 6th bit of funct7 and funct3
@@ -169,15 +175,15 @@ class IDModule extends Module {
       }
     }
     is(1.U){ //I-Instructions arithmetic&logic
-      switch(io.instr(14,12)){ //switch on funct3
-        is("b000".U){io.aluOpSelect := ADD}
-        is("b100".U){io.aluOpSelect := XOR}
-        is("b110".U){io.aluOpSelect := OR }
-        is("b111".U){io.aluOpSelect := AND}
-        is("b001".U){io.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SLL, ADD)}//false=error
-        is("b101".U){io.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SRL, Mux(io.imm(11,5)==="b0100000".U, SRA, ADD))} //false=error
-        is("b010".U){io.aluOpSelect := SLT}
-        is("b011".U){io.aluOpSelect := SLTU}
+      switch(instr(14,12)){ //switch on funct3
+        is("b000".U){io.exControl.aluOpSelect := ADD}
+        is("b100".U){io.exControl.aluOpSelect := XOR}
+        is("b110".U){io.exControl.aluOpSelect := OR }
+        is("b111".U){io.exControl.aluOpSelect := AND}
+        is("b001".U){io.exControl.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SLL, ADD)}//false=error
+        is("b101".U){io.exControl.aluOpSelect := Mux(io.imm(11,5) === "b0000000".U, SRL, Mux(io.imm(11,5)==="b0100000".U, SRA, ADD))} //false=error
+        is("b010".U){io.exControl.aluOpSelect := SLT}
+        is("b011".U){io.exControl.aluOpSelect := SLTU}
       }
     }
     is(2.U){ //LOAD AND STORE Instructions

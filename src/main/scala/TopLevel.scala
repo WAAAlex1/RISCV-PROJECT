@@ -1,5 +1,6 @@
 import chisel3._
 
+
 class TopLevel extends Module {
   val io = IO(new Bundle {
     val tx = Output(Bool())
@@ -66,6 +67,8 @@ class TopLevel extends Module {
   memModule.io.memToReg := exModule.io.memToRegOut
   memModule.io.branchCheck := exModule.io.branchCheckOut
   memModule.io.memSize := exModule.io.memSizeOut
+   */
+  memModule.io.memControl := exModule.io.exControl.sigBundle
 
 
   //Connect toplevel IO:

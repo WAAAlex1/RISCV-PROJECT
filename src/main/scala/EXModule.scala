@@ -29,8 +29,12 @@ class EXModule extends Module {
     val memWriteIn  = Input(Bool())
     val regWriteIn  = Input(Bool())
     val memToRegIn  = Input(Bool())
-    val branchCheckIn = Input(Bool())
-    val memSizeIn     = Input(UInt(3.W))
+    val memSizeIn   = Input(UInt(3.W))
+    val aluOpSelect = Input(AluOperations())
+     */
+
+    //Replace with Bundle:
+    val exControl = Input(new EXBundle)
 
     //Out
     val branchOut   = Output(Bool())
@@ -43,13 +47,15 @@ class EXModule extends Module {
   })
 
   // Pipeline Registers: --------------------------------------------------------
+  // For data Signals
   val rs1data     = RegNext(io.rs1data)
   val rs2dataIn   = RegNext(io.rs2dataIn)
   val pc          = RegNext(io.pc)
   val rdIn        = RegNext(io.rdIn)
   val imm         = RegNext(io.imm)
-  val aluOpSelect  = RegNext(io.aluOpSelect)
 
+  /* For control signals
+  val aluOpSelect = RegNext(io.aluOpSelect)
   val aluSRC      = RegNext(io.aluSRC)
   val branchIn    = RegNext(io.branchIn)
   val memReadIn   = RegNext(io.memReadIn)
@@ -59,6 +65,8 @@ class EXModule extends Module {
   val branchCheckIn = RegNext(io.branchCheckIn)
   val pcSelect    = RegNext(io.pcSelect)
   val memSizeIn   = RegNext(io.memSizeIn)
+  */
+  val exControl = RegNext(io.exControl)
 
   // Logic ----------------------------------------------------------------------------
   //AddSum (Calculate branch address
@@ -97,7 +105,7 @@ class EXModule extends Module {
     }
     is(JAL){ io.aluResult := (pc + 4.U).asSInt}
     is(LUI){io.aluResult := imm}
-    is(AUIPC){ io.aluResult := (pc.asSInt + imm)}
+    is(AUIPC){io.aluResult := (pc.asSInt + imm)}
   }
 
 
@@ -110,6 +118,9 @@ class EXModule extends Module {
   io.regWriteOut := regWriteIn
   io.memToRegOut := memToRegIn
   io.memSizeOut := memSizeIn
+  */
+  //Replace with
+  io.memControl := exControl.sigBundle
 
   //Data signals:
   io.rdOut := rdIn
