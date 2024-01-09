@@ -19,3 +19,6 @@
 *.bin
 
 
+TopLevel.anno.json
+TopLevel.fir
+TopLevel.v
