@@ -76,8 +76,8 @@ DONE    5. Bundles Bundles Bundles???
 Dag 6:
      Hvad skal vi arbejde på:
 DONE    1. Lav en memory test hvor det hele virker
-IP      2. Control signals til at styre om mem skal arbejde i bytes, halfwords eller words.
-        3. test mem again
+DONE    2. Control signals til at styre om mem skal arbejde i bytes, halfwords eller words.
+DONE    3. test mem again
         4. LED Blink test
             a) Questions:
                 Using syncReadMem;
