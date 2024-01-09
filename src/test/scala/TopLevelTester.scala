@@ -348,42 +348,50 @@ class TopLevelTester8 extends AnyFlatSpec with
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(2.U)
-      dut.io.wrData.poke("h88808093".U) //addi x1 x1 -1912
+      dut.io.wrData.poke("h00000013".U) //nop
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(3.U)
-      dut.io.wrData.poke("h00c00113".U) //addi x2 x0 12
+      dut.io.wrData.poke("h00000013".U) //nop
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(4.U)
-      dut.io.wrData.poke("h00000013".U) //nop
+      dut.io.wrData.poke("h88808093".U) //addi x1 x1 -1912
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(5.U)
-      dut.io.wrData.poke("h00000013".U) //nop
+      dut.io.wrData.poke("h00c00113".U) //addi x2 x0 12
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(6.U)
-      dut.io.wrData.poke("h00110023".U) //sb x1 0 x2
+      dut.io.wrData.poke("h00000013".U) //nop
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(7.U)
-      dut.io.wrData.poke("h001110a3".U) //sh x1 1 x2
+      dut.io.wrData.poke("h00000013".U) //nop
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(8.U)
-      dut.io.wrData.poke("h00010183".U) //lb x3 0 x2
+      dut.io.wrData.poke("h00110023".U) //sb x1 0 x2
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(9.U)
-      dut.io.wrData.poke("h00111203".U) //lh x4 1 x2
+      dut.io.wrData.poke("h001110a3".U) //sh x1 1 x2
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(10.U)
-      dut.io.wrData.poke("h00014283".U) //lbu x5 0 x2
+      dut.io.wrData.poke("h00010183".U) //lb x3 0 x2
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(11.U)
+      dut.io.wrData.poke("h00111203".U) //lh x4 1 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(12.U)
+      dut.io.wrData.poke("h00014283".U) //lbu x5 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(13.U)
       dut.io.wrData.poke("h00115303".U) //lhu x6 1 x2
 
       dut.clock.step(1)
