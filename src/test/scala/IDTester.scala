@@ -24,8 +24,7 @@ class IDTester extends AnyFlatSpec with
       dut.io.rs1data.expect(0.S) //check if x1 resets/starts at zero
       dut.io.imm.expect(-235.S)
       dut.io.rd.expect(2.U)
-      dut.io.pcSelect.expect(false.B)
-      dut.io.aluOpSelect.expect(ADD)
+      dut.io.exControl.aluOpSelect.expect(ADD)
     }
   }
 }

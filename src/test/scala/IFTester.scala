@@ -36,6 +36,7 @@ class IFTester2 extends AnyFlatSpec with
       dut.io.wrData.poke(4.U)
       dut.io.wrEna.poke(true.B)
       dut.clock.step(1)
+      dut.io.pcSrc.poke(false.B)
       dut.io.wrEna.poke(false.B)
       println("pc after branch is:" + dut.io.pc.peekInt())
       println("Instruction after branch is (expect 4):" + dut.io.instruction.peekInt())

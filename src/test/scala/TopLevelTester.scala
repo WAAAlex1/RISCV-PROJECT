@@ -83,6 +83,7 @@ class TopLevelTester2 extends AnyFlatSpec with
   }
 }
 
+//bool.s
 class TopLevelTester3 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -192,6 +193,206 @@ class TopLevelTester4 extends AnyFlatSpec with
       dut.io.wrEna.poke(false.B)
       dut.clock.step(4)
       dut.io.regFile(6).expect(-1412567125.S)
+    }
+  }
+}
+
+//test: branchcnt.s
+class TopLevelTester5 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      //Insert instruction into the instruction memory:
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h00000513".U) //addi x10 x0 0
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h00a00593".U) //addi x11 x0 10
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h00150513".U) //addi x10 x10 1
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(7.U)
+      dut.io.wrData.poke("hfeb51ae3".U) //bne x10 x11 -12
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(8.U)
+      dut.io.wrData.poke("hfeb542e3".U) //blt x10 x11 -28
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(9.U)
+      dut.io.wrData.poke("hfea5c0e3".U) //blt x11 x10 -32
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(10.U)
+      dut.io.wrData.poke("h00050613".U) //addi x12 x10 0
+
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      dut.clock.step(70)
+      dut.io.regFile(10).expect(10.S) //0x0000000a
+      dut.io.regFile(11).expect(10.S) //0x0000000a
+      dut.io.regFile(12).expect(10.S) //0x0000000a
+    }
+  }
+}
+
+//mini mem test
+class TopLevelTester6 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      //Insert instruction into the instruction memory:
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h02a00093".U) //addi x1 x0 42
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h00a00113".U) //addi x2 x0 10
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00112023".U) //sw x1 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("h00012183".U) //lw x3 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      dut.clock.step(5)
+      dut.io.regFile(3).expect(42.S)
+    }
+  }
+}
+
+//mini mem test
+class TopLevelTester7 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      //Insert instruction into the instruction memory:
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h040000b7".U) //lui x1 0x4000
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h3ff00113".U) //addi x2 x0 1023
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00112023".U) //sw x1 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+      
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(7.U)
+      dut.io.wrData.poke("h00012503".U) //lw x10 0 x2
+
+      dut.clock.step(1)
+
+      dut.io.wrEna.poke(false.B)
+      println("x1 is" + dut.io.regFile(1).peekInt())
+      println("x2 is" + dut.io.regFile(2).peekInt())
+      dut.clock.step(4)
+      dut.io.regFile(10).expect(67108864.S)
+    }
+  }
+}
+
+//Tests loading and storing byte, hw and unsigned bytes and hws.
+class TopLevelTester8 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      //Insert instruction into the instruction memory:
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h666690b7".U) //lui x1 0x66669
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h88808093".U) //addi x1 x1 -1912
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00c00113".U) //addi x2 x0 12
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00000013".U) //nop
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("h00110023".U) //sb x1 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(7.U)
+      dut.io.wrData.poke("h001110a3".U) //sh x1 1 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(8.U)
+      dut.io.wrData.poke("h00010183".U) //lb x3 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(9.U)
+      dut.io.wrData.poke("h00111203".U) //lh x4 1 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(10.U)
+      dut.io.wrData.poke("h00014283".U) //lbu x5 0 x2
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(11.U)
+      dut.io.wrData.poke("h00115303".U) //lhu x6 1 x2
+
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      dut.clock.step(5)
+      dut.io.regFile(3).expect(-120.S) //expect lb to sign extend
+      dut.io.regFile(4).expect(-30584.S) //expect lh to sign extend
+      dut.io.regFile(5).expect(136.S) //expect lbu to zero extend
+      dut.io.regFile(6).expect(34952.S) //expect lhu to zero extend
     }
   }
 }

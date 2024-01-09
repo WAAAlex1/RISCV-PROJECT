@@ -24,22 +24,11 @@ class IDModule extends Module {
     val pcOut         = Output(UInt(32.W))
     val rd            = Output(UInt(5.W))
     val imm           = Output(SInt(32.W))
-    val aluOpSelect   = Output(AluOperations())
-    val pcSelect      = Output(Bool()) //Control signal for PC adder (true only if JALR)
     val regFile       = Output(Vec(32,SInt(32.W)))
+    val branchAddr    = Output(UInt(32.W))
+    val pcSrc         = Output(Bool())
 
     //Control signals Out
-    /*
-    val aluSRC        = Output(Bool())
-    val memRead       = Output(Bool())
-    val memWrite      = Output(Bool())
-    val regWriteOut   = Output(Bool())
-    val memToReg      = Output(Bool())
-    val branchCheck   = Output(Bool())
-    val memSize       = Output(UInt(3.W))
-    val aluOpSelect   = Output(AluOperations())
-    */
-    //Replace with Bundle:
     val exControl = Output(new EXBundle)
 
     //Temp outputs for testing
@@ -50,22 +39,23 @@ class IDModule extends Module {
   //-----------------------------------------------------------------------------
   //Pipeline Registers
   val pcIn = RegNext(io.pcIn)
+  val instr = RegNext(io.instr)
 
   //RegisterFile
-  val registerFile = Reg(Vec(32,SInt(32.W)))
+  val registerFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W)))) //reset to nop instructions
   registerFile(0) := 0.S //x0 = 0
-  val rs1data = registerFile(io.instr(19, 15))
-  val rs2data = registerFile(io.instr(24, 20))
+  val rs1data = registerFile(instr(19, 15))
+  val rs2data = registerFile(instr(24, 20))
 
   //control signals base-case:
-  io.aluSRC := false.B
-  io.branch := false.B
-  io.memRead := false.B
-  io.memWrite := false.B
-  io.regWriteOut := true.B
-  io.memToReg := false.B
-  io.pcSelect := false.B
-  io.memSize := 0.U
+  val branch = WireDefault(false.B)
+  val pcSelect = WireDefault(false.B) //Control signal for PC adder (true only if JALR)
+  io.exControl.aluSRC := false.B
+  io.exControl.sigBundle.memRead := false.B
+  io.exControl.sigBundle.memWrite := false.B
+  io.exControl.sigBundle.regWrite := true.B
+  io.exControl.sigBundle.memToReg := false.B
+  io.exControl.sigBundle.memSize := 2.U //word
 
   //ADDED FOR TESTING, REMOVE
   io.aluControl := 0.U
@@ -82,53 +72,53 @@ class IDModule extends Module {
   //When processing J-TYPE - ignore first 2 bits as the least value we increment PC by is 4.
   //(Allows for minimal synthesis of opcode using a single 6-bit LUT)
   io.imm := 0.S //INIT io.imm default value 0
-  switch(io.instr(6,1)) {
+  switch(instr(6,1)) {
     is (25.U) { //R-TYPE 011001 (NO IMM) / Normal add, sub, xor ... instructions
       aluOPType := 0.U //alu control signal
 
       //Control signals:
-      io.aluSRC := false.B
-      io.branch := false.B
-      io.memRead := false.B
-      io.memWrite := false.B
-      io.regWriteOut := true.B
-      io.memToReg := false.B
+      io.exControl.aluSRC := false.B
+      branch := false.B
+      io.exControl.sigBundle.memRead := false.B
+      io.exControl.sigBundle.memWrite := false.B
+      io.exControl.sigBundle.regWrite := true.B
+      io.exControl.sigBundle.memToReg := false.B
     }
     is (9.U)  { //I-TYPE imm[11:0] 001001 / normal imm instructions
-      io.imm := ((io.instr(31,20) ## "hFFFFF".U).asSInt >> 20)
+      io.imm := ((instr(31,20) ## "hFFFFF".U).asSInt >> 20)
       aluOPType := 1.U//alu control signal
 
       //Control signals:
-      io.aluSRC := true.B
-      io.branch := false.B
-      io.memRead := false.B
-      io.memWrite := false.B
-      io.regWriteOut := true.B
-      io.memToReg := false.B
+      io.exControl.aluSRC := true.B
+      branch := false.B
+      io.exControl.sigBundle.memRead := false.B
+      io.exControl.sigBundle.memWrite := false.B
+      io.exControl.sigBundle.regWrite := true.B
+      io.exControl.sigBundle.memToReg := false.B
     }
     is (1.U)  { //I-TYPE imm[11:0] 000001 / load instructions
-      io.imm := (io.instr(31,20) ## "hFFFFF".U).asSInt >> 20
+      io.imm := (instr(31,20) ## "hFFFFF".U).asSInt >> 20
       aluOPType := 2.U//alu control signal
 
       //Control signals:
-      io.aluSRC := true.B
-      io.branch := false.B
-      io.memRead := true.B
-      io.memWrite := false.B
-      io.regWriteOut := true.B
-      io.memToReg := true.B
+      io.exControl.aluSRC := true.B
+      branch := false.B
+      io.exControl.sigBundle.memRead := true.B
+      io.exControl.sigBundle.memWrite := false.B
+      io.exControl.sigBundle.regWrite := true.B
+      io.exControl.sigBundle.memToReg := true.B
     }
     is (57.U) { //I-TYPE imm[11:0] 111001 / ecall / ebreak
       //No ALU control needed in this case
-      io.imm := ( io.instr(31,20) ## "hFFFFF".U ).asSInt >> 20
+      io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
     }
     is (51.U) { //I-TYPE imm[11:0] 110011 / jalr
       //No ALU control needed in this case
-      io.imm := ( io.instr(31,20) ## "hFFFFF".U ).asSInt >> 20
-      io.pcSelect := true.B //Control signal for PC adder in case of JALR
+      io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
+      pcSelect := true.B //Control signal for PC adder in case of JALR
     }
     is (17.U) {  //S-TYPE imm[11:5][4:0] 010001 / save instruction
-      io.imm := ( io.instr(31,25) ## io.instr(11,7) ## "hFFFFF".U ).asSInt >> 20
+      io.imm := ( instr(31,25) ## instr(11,7) ## "hFFFFF".U ).asSInt >> 20
       aluOPType := 2.U//alu control signal
 
       //Control signals:
@@ -140,38 +130,38 @@ class IDModule extends Module {
       io.exControl.sigBundle.memToReg := false.B //dont care
     }
     is (49.U) { //B-TYPE imm[12|10:5][4:1|11] 110001 / branch instruction
-      io.imm := ( io.instr(31) ## io.instr(7) ## io.instr(30,25) ## io.instr(11,8) ## "hFFFFF".U ).asSInt >> 19
+      io.imm := ( instr(31) ## instr(7) ## instr(30,25) ## instr(11,8) ## "hFFFFF".U ).asSInt >> 19
 
       //Control signals:
-      io.aluSRC := false.B
-      io.branch := true.B
-      io.memRead := false.B
-      io.memWrite := false.B
-      io.regWriteOut := false.B
-      io.memToReg := false.B //dont care
+      io.exControl.aluSRC := false.B
+      branch := true.B
+      io.exControl.sigBundle.memRead := false.B
+      io.exControl.sigBundle.memWrite := false.B
+      io.exControl.sigBundle.regWrite := false.B
+      io.exControl.sigBundle.memToReg := false.B //dont care
     }
     is (55.U) { //J-TYPE jal
-      io.imm := ( io.instr(31) ## io.instr(19,12) ## io.instr(20) ## io.instr(30,22) ## "hFFF1".U ).asSInt >> 11
+      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,22) ## "hFFF1".U ).asSInt >> 11
     }
-    is (27.U) { io.imm := ( io.instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
-    is (11.U) { io.imm := ( io.instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
+    is (27.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
+    is (11.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
   }
 
   //ALU control
   io.exControl.aluOpSelect := ADD
   switch(aluOPType){
     is(0.U){ //normal arithmetic&logic R
-      switch(io.instr(30) ## io.instr(14,12)){ //switch on 6th bit of funct7 and funct3
-        is("b0000".U){io.aluOpSelect := ADD}
-        is("b1000".U){io.aluOpSelect := SUB}
-        is("b0100".U){io.aluOpSelect := XOR}
-        is("b0110".U){io.aluOpSelect := OR }
-        is("b0111".U){io.aluOpSelect := AND}
-        is("b0001".U){io.aluOpSelect := SLL}
-        is("b0101".U){io.aluOpSelect := SRL}
-        is("b1101".U){io.aluOpSelect := SRA}
-        is("b0010".U){io.aluOpSelect := SLT}
-        is("b0011".U){io.aluOpSelect := SLTU}
+      switch(instr(30) ## instr(14,12)){ //switch on 6th bit of funct7 and funct3
+        is("b0000".U){io.exControl.aluOpSelect := ADD}
+        is("b1000".U){io.exControl.aluOpSelect := SUB}
+        is("b0100".U){io.exControl.aluOpSelect := XOR}
+        is("b0110".U){io.exControl.aluOpSelect := OR }
+        is("b0111".U){io.exControl.aluOpSelect := AND}
+        is("b0001".U){io.exControl.aluOpSelect := SLL}
+        is("b0101".U){io.exControl.aluOpSelect := SRL}
+        is("b1101".U){io.exControl.aluOpSelect := SRA}
+        is("b0010".U){io.exControl.aluOpSelect := SLT}
+        is("b0011".U){io.exControl.aluOpSelect := SLTU}
       }
     }
     is(1.U){ //I-Instructions arithmetic&logic
@@ -187,39 +177,40 @@ class IDModule extends Module {
       }
     }
     is(2.U){ //LOAD AND STORE Instructions
-      io.aluOpSelect := ADD
-      io.memSize := io.instr(14,12) //decides if mem takes byte, halfword or word
+      io.exControl.aluOpSelect := ADD
+      io.exControl.sigBundle.memSize := instr(14,12) //decides if mem takes byte, halfword or word
+      //memSize: 0=Byte, 1=Halfword, 2=Word, 4=ByteUnsigned, 5=halfwordUnsigned
     }
   }
   //Special cases - found easiest from opcode
-  switch(io.instr(6,1)){
-    is("b110111".U){io.aluOpSelect := JAL}
-    is("b110011".U){io.aluOpSelect := JAL}
-    is("b011011".U){io.aluOpSelect := LUI}
-    is("b001011".U){io.aluOpSelect := AUIPC}
+  switch(instr(6,1)){
+    is("b110111".U){io.exControl.aluOpSelect := JAL}
+    is("b110011".U){io.exControl.aluOpSelect := JAL}
+    is("b011011".U){io.exControl.aluOpSelect := LUI}
+    is("b001011".U){io.exControl.aluOpSelect := AUIPC}
   }
 
   //BranchCheck logic. (this just assumes branch and checks for the conditions)
-  io.branchCheck := false.B
-  switch(io.instr(14,12))
+  val branchCheck = WireDefault(false.B)
+  switch(instr(14,12))
   {
     is(0.U){ //beq
-      io.branchCheck := (rs1data === rs2data)
+      branchCheck := (rs1data === rs2data)
     }
-    is(1.U){
-      io.branchCheck := (rs1data =/= rs2data)
+    is(1.U){ //bne
+      branchCheck := (rs1data =/= rs2data)
     }
-    is(4.U){
-      io.branchCheck := (rs1data < rs2data)
+    is(4.U){ //blt
+      branchCheck := (rs1data < rs2data)
     }
-    is(5.U){
-      io.branchCheck := (rs1data >= rs2data)
+    is(5.U){ //bge
+      branchCheck := (rs1data >= rs2data)
     }
-    is(6.U){
-      io.branchCheck := (rs1data.asUInt < rs2data.asUInt)
+    is(6.U){ //bltu
+      branchCheck := (rs1data.asUInt < rs2data.asUInt)
     }
-    is(7.U){
-      io.branchCheck := (rs1data.asUInt >= rs2data.asUInt)
+    is(7.U){ //bgeu
+      branchCheck := (rs1data.asUInt >= rs2data.asUInt)
     }
   }
 
@@ -228,14 +219,20 @@ class IDModule extends Module {
     registerFile(io.writeRegIdx) := io.writeRegData
   }
 
+  //AddSum (Calculate branch address)
+  io.branchAddr := Mux(pcSelect, rs1data + io.imm, pcIn.asSInt + io.imm).asUInt
+
+  //pcSrc:
+  io.pcSrc := (branch & branchCheck)
+
   //IO
   io.pcOut := pcIn
   io.rs1data := rs1data
   io.rs2data := rs2data
-  io.rd := io.instr(11,7)
+  io.rd := instr(11,7)
   io.regFile := registerFile
 
   //ADDED FOR TESTING, REMOVE
-  io.aluControl := io.instr(30) ## io.instr(14,12)
+  io.aluControl := instr(30) ## instr(14,12)
   io.aluOPType := aluOPType
 }

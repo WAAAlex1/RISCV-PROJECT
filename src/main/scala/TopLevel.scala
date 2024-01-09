@@ -28,8 +28,8 @@ class TopLevel extends Module {
   val memModule = Module(new MEMModule)
 
   //IF inputs:
-  ifModule.io.pcSrc := memModule.io.pcSrc
-  ifModule.io.branchAddr := memModule.io.branchAddrOut
+  ifModule.io.pcSrc := idModule.io.pcSrc
+  ifModule.io.branchAddr := idModule.io.branchAddr
 
   //ID inputs:
   idModule.io.pcIn := ifModule.io.pc
@@ -44,31 +44,30 @@ class TopLevel extends Module {
   exModule.io.pc := idModule.io.pcOut
   exModule.io.rdIn := idModule.io.rd
   exModule.io.imm := idModule.io.imm
+  /*
   exModule.io.aluOpSelect := idModule.io.aluOpSelect
-  exModule.io.pcSelect := idModule.io.pcSelect
   exModule.io.aluSRC := idModule.io.aluSRC
-  exModule.io.branchIn := idModule.io.branch
   exModule.io.memReadIn := idModule.io.memRead
   exModule.io.memWriteIn := idModule.io.memWrite
   exModule.io.regWriteIn := idModule.io.regWriteOut
   exModule.io.memToRegIn := idModule.io.memToReg
-  exModule.io.branchCheckIn := idModule.io.branchCheck
   exModule.io.memSizeIn := idModule.io.memSize
+  */
+  exModule.io.exControl := idModule.io.exControl
+
 
   //MEM inputs:
-  memModule.io.branchAddrIn := exModule.io.branchAddr
   memModule.io.aluResult := exModule.io.aluResult
   memModule.io.rs2Data := exModule.io.rs2DataOut
   memModule.io.rdIn := exModule.io.rdOut
-  memModule.io.branch := exModule.io.branchOut
+  /*
   memModule.io.memRead := exModule.io.memReadOut
   memModule.io.memWrite := exModule.io.memWriteOut
   memModule.io.regWriteIn := exModule.io.regWriteOut
   memModule.io.memToReg := exModule.io.memToRegOut
-  memModule.io.branchCheck := exModule.io.branchCheckOut
   memModule.io.memSize := exModule.io.memSizeOut
    */
-  memModule.io.memControl := exModule.io.exControl.sigBundle
+  memModule.io.memControl := exModule.io.memControl
 
 
   //Connect toplevel IO:
@@ -77,7 +76,7 @@ class TopLevel extends Module {
   ifModule.io.wrEna  := io.wrEna
 
   io.regFile := idModule.io.regFile
-  io.pc      := ifModule.io.pc //for debugging
+  io.pc := ifModule.io.pc //for debugging
 
   // ------------------------------------------------------------------------------
 }

@@ -38,8 +38,19 @@ class MEMModule extends Module {
   val memOutput = WireDefault(0.S(32.W))
   memOutput := memory.io.rdData.asSInt
 
+  //Control whether we're loading byte, halfword or word and whether unsigned or not.
+  val sizedMemOutput = WireDefault(0.S(32.W))
+  switch(memSize)
+  {
+    is(0.U){sizedMemOutput := Mux(memOutput(7) === 1.U,"hFFFFFF".U ## memOutput(7,0),"h000000".U ## memOutput(7,0)).asSInt}//sign extended byte
+    is(1.U){sizedMemOutput := Mux(memOutput(15) === 1.U,"hFFFF".U ## memOutput(15,0),"h0000".U ## memOutput(15,0)).asSInt}//sign extended halfword
+    is(2.U){sizedMemOutput := memOutput} //word
+    is(4.U){sizedMemOutput := ("h000000".U ## memOutput(7,0)).asSInt} //byte unsigned
+    is(5.U){sizedMemOutput := ("h0000".U ## memOutput(15,0)).asSInt} //halfword unsigned
+  }
+
   //Write back:
-  io.regWriteData := Mux(memToReg,memOutput,aluResult) //regnext'ed aluresult
+  io.regWriteData := Mux(memToReg,sizedMemOutput,aluResult) //regnext'ed aluresult
 
   //Other outputs:
   io.rdOut := rdIn

@@ -57,5 +57,61 @@ Dag 4:
     Questions:
         If our memory is in byte elements then it would take 4 clockcycles to read a word? Does this mean we
         need the memory to be made of word-elements or are we missing something?
+Dag 5:
+    Hvad skal vi arbejde på:
+DONE    0.5: Synthesize vores ting der virker på fpga board.
+            a: Problems:
+                1. Storing instructions in memory.
+                2. Reading registers.
+            b:  Chosen Solution:
+                1.  Hardcode the instructions (disgusting, but needed)
+                2.  Use the LEDS (only 16, so some regs we cant show)
+DONE    0.75: Flyt alt branch stuff til ID stage (det er free (optimize da vi skal flushe mindre stages)).
+DONE    1. Test om branch virker -> det virker ikke -> fix det (nok med flush ting).
+        2. Bootloader eller serial port til at skrive programmer ind.
+        3. Control signals til at styre om mem skal arbejde i bytes, halfwords eller words.
+        4. Forwarding?
+DONE    5. Bundles Bundles Bundles???
+
+Dag 6:
+     Hvad skal vi arbejde på:
+DONE    1. Lav en memory test hvor det hele virker
+IP      2. Control signals til at styre om mem skal arbejde i bytes, halfwords eller words.
+        3. test mem again
+        4. LED Blink test
+            a) Questions:
+                Using syncReadMem;
+                1. Which memory address should we sw?
+                2. What should be saved at this address?
+                3. How do we connect the memory address to the LED?
+
+            b) Idea
+                1. Store value in a single register
+                2. change / manipulate mem stage to get to work?
+                3. Or simply read from register file
+                4. Then we are not using sw?
+        5. UART
+        6. Forwarding?
+        7. Bootloader eller serial port til at skrive programmer ind.
 
 
+
+        nop
+        addi x3 x0 20
+        addi x1 x1 20
+        nop
+        nop
+        ## Start iterative process
+        cntdown:
+            addi x1 x1 -1
+            nop
+            nop
+            bne x1 x0 cntdown
+            addi x2 x0 1
+        cntup:
+            addi x1 x1 1
+            nop
+            nop
+            bne x1 x3 cntup
+            addi x2 x0 0
+            j cntdown
