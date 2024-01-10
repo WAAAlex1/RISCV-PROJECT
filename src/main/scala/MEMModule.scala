@@ -18,7 +18,6 @@ class MEMModule extends Module {
 
     //Out
     val regWriteOut  = Output(Bool())
-
   })
 
   //Registers on the inputs that dont go through memory:

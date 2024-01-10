@@ -17,6 +17,10 @@ class EXBundle extends Bundle {
   //Control signals which are NOT passed to MEM
   val aluSRC = Bool() //not passed further
   val aluOpSelect = AluOperations()
+
+  //Forwarding control signals
+  val rs1Idx      = UInt(5.W)
+  val rs2Idx      = UInt(5.W)
 }
 
 

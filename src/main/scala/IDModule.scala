@@ -28,6 +28,12 @@ class IDModule extends Module {
     val branchAddr    = Output(UInt(32.W))
     val pcSrc         = Output(Bool())
 
+    //Forwarding signals in:
+    val resEX = Input(SInt(32.W))
+    val resMEM = Input(SInt(32.W))
+    val forward1 = Input(UInt(2.W))
+    val forward2 = Input(UInt(2.W))
+
     //Control signals Out
     val exControl = Output(new EXBundle)
 
@@ -43,9 +49,10 @@ class IDModule extends Module {
 
   //RegisterFile
   val registerFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W)))) //reset to nop instructions
-  registerFile(0) := 0.S //x0 = 0
-  val rs1data = registerFile(instr(19, 15))
-  val rs2data = registerFile(instr(24, 20))
+  val rs1data = Mux(io.forward1(0),io.resEX,Mux(io.forward1(1),io.resMEM,registerFile(instr(19, 15))))
+  val rs2data = Mux(io.forward2(0),io.resEX,Mux(io.forward2(1),io.resMEM,registerFile(instr(24, 20))))
+  io.exControl.rs1Idx := instr(19, 15)
+  io.exControl.rs2Idx := instr(24, 20)
 
   //control signals base-case:
   val branch = WireDefault(false.B)
@@ -230,6 +237,8 @@ class IDModule extends Module {
   io.rs1data := rs1data
   io.rs2data := rs2data
   io.rd := instr(11,7)
+
+  registerFile(0) := 0.S //x0 = 0
   io.regFile := registerFile
 
   //ADDED FOR TESTING, REMOVE

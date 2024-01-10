@@ -94,24 +94,15 @@ DONE    3. test mem again
         6. Forwarding?
         7. Bootloader eller serial port til at skrive programmer ind.
 
+Dag 7:
+    Hvad skal vi arbejde på:
+DONE    1. Blinking LED
+        2. UART
+IP      3. Forwarding
+            Hvor skal vi bruge forwarding?
+                Post EX/MEM til post ID/EX
+                Post EX/MEM aluResult  til branchCheck i ID
+                Pre EX/MEM aluResult til branchCheck i ID
 
-
-        nop
-        addi x3 x0 20
-        addi x1 x1 20
-        nop
-        nop
-        ## Start iterative process
-        cntdown:
-            addi x1 x1 -1
-            nop
-            nop
-            bne x1 x0 cntdown
-            addi x2 x0 1
-        cntup:
-            addi x1 x1 1
-            nop
-            nop
-            bne x1 x3 cntup
-            addi x2 x0 0
-            j cntdown
+            Vi laver et dedikeret forwarding unit modul.
+                Fordi den skal lave logic operations selv på rd fra de forskellige steder

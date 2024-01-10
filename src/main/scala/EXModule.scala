@@ -21,6 +21,9 @@ class EXModule extends Module {
     //Control signals:
     //In
     val exControl = Input(new EXBundle)
+    val forward1  = Input(Bool())
+    val forward2  = Input(Bool())
+    val resMEM    = Input(SInt(32.W))
 
     //Out
     //Replace with Bundle:
@@ -29,8 +32,9 @@ class EXModule extends Module {
 
   // Pipeline Registers: --------------------------------------------------------
   // For data Signals
-  val rs1data     = RegNext(io.rs1data)
-  val rs2dataIn   = RegNext(io.rs2dataIn)
+  //FORWARDING:
+  val rs1data     = Mux(io.forward1,io.resMEM,RegNext(io.rs1data))
+  val rs2dataIn   = Mux(io.forward2,io.resMEM,RegNext(io.rs2dataIn))
   val pc          = RegNext(io.pc)
   val rdIn        = RegNext(io.rdIn)
   val imm         = RegNext(io.imm)

@@ -53,26 +53,15 @@ class TopLevelTester2 extends AnyFlatSpec with
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(2.U)
-      dut.io.wrData.poke("h00000013".U) //nop
+      dut.io.wrData.poke("h00200113".U) //addi x2 x0 2
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(3.U)
       dut.io.wrData.poke("h00000013".U) //nop
 
+
       dut.clock.step(1)
       dut.io.wrAddr.poke(4.U)
-      dut.io.wrData.poke("h00200113".U) //addi x2 x0 2
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(5.U)
-      dut.io.wrData.poke("h00000013".U) //nop
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(6.U)
-      dut.io.wrData.poke("h00000013".U) //nop
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(7.U)
       dut.io.wrData.poke("h402080b3".U) //sub x1 x1 x2
 
       dut.clock.step(1)
@@ -404,3 +393,119 @@ class TopLevelTester8 extends AnyFlatSpec with
     }
   }
 }
+
+/*
+//Test blinking LEDoutput for hardcoding
+class TopLevelTester9 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      dut.clock.step(6)
+      dut.io.regFile2bit1.expect(false.B)
+      dut.clock.step(490)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+      dut.clock.step(1)
+      println("reg2bit1 er: " + dut.io.regFile2bit1.peekInt())
+      println("counteren er: " + dut.io.regFile1.peekInt())
+
+
+
+
+    }
+  }
+}
+*/
