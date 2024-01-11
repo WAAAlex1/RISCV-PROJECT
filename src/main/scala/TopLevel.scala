@@ -5,15 +5,16 @@ class TopLevel extends Module {
   val io = IO(new Bundle {
     val tx = Output(Bool())
 
-    //Instruction mem filling stuff:
+    //Stuff for chisel testing (comment out for hardcode or synthesize):
 
-    val wrAddr  = Input(UInt(10.W)) //comment out for hardcode
-    val wrData  = Input(UInt(32.W)) //comment out for hardcode
-    val wrEna   = Input(Bool()) //comment out for hardcode
+    val wrAddr  = Input(UInt(10.W))
+    val wrData  = Input(UInt(32.W))
+    val wrEna   = Input(Bool())
+    val regFile = Output(Vec(32,SInt(32.W)))
 
-    val regFile = Output(Vec(32,SInt(32.W))) //comment out for hardcode testing
-    //val regFile2bit1 = Output(Bool()) //for hardcoding
-    val pc      = Output(UInt(32.W)) //comment out for hardcode testing
+
+    //REAL IO:
+    val ioLED = UInt(16.W)
   })
   // ------------------------------------------------------------------------------
   // Clk
@@ -60,27 +61,30 @@ class TopLevel extends Module {
   memModule.io.aluResult := exModule.io.aluResult
   memModule.io.rs2Data := exModule.io.rs2DataOut
   memModule.io.rdIn := exModule.io.rdOut
-  memModule.io.memControl := exModule.io.memControl
+  memModule.io.memControl := exModule.io.memControl.sigBundle
 
   //Forwarding inputs:
   forwardingModule.io.rdEX := exModule.io.rdOut
   forwardingModule.io.rdMEM := memModule.io.rdOut
-  forwardingModule.io.regWriteEX := exModule.io.exControl.sigBundle.regWrite
-  forwardingModule.io.regWriteMEM := memModule.io.memControl.regWrite
-  forwardingModule.io.rs1IdxEX := exModule.io.exControl.rs1Idx
-  forwardingModule.io.rs2IdxEX := exModule.io.exControl.rs2Idx
+  forwardingModule.io.regWriteEX := exModule.io.memControl.sigBundle.regWrite
+  forwardingModule.io.regWriteMEM := memModule.io.regWriteOut
+  forwardingModule.io.rs1IdxEX := exModule.io.memControl.rs1Idx
+  forwardingModule.io.rs2IdxEX := exModule.io.memControl.rs2Idx
   forwardingModule.io.rs1IdxID := idModule.io.exControl.rs1Idx
   forwardingModule.io.rs2IdxID := idModule.io.exControl.rs2Idx
 
   //Connect toplevel IO: (comment out for hardcode)
+
   ifModule.io.wrAddr := io.wrAddr
   ifModule.io.wrData := io.wrData
   ifModule.io.wrEna  := io.wrEna
 
-
   io.regFile := idModule.io.regFile //comment out for hardcode
-  //io.regFile2bit1 := idModule.io.regFile(2)(0) //for hardcoding
-  io.pc := ifModule.io.pc //comment out for hardcoding
+
+
+  //REAL IO Connections:
+  io.ioLED := memModule.io.ioWrite.ioLED
+
 
   // ------------------------------------------------------------------------------
 }

@@ -16,7 +16,7 @@ class IDModule extends Module {
     val writeRegIdx  = Input(UInt(5.W))
     val regWriteIn    = Input(Bool())
     val writeRegData  = Input(SInt(32.W))
-    val instr         = Input(UInt(32.W)) //dont regNext because from memory
+    val instr         = Input(UInt(32.W))
 
     //Data Out
     val rs1data       = Output(SInt(32.W))
@@ -49,10 +49,35 @@ class IDModule extends Module {
 
   //RegisterFile
   val registerFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W)))) //reset to nop instructions
-  val rs1data = Mux(io.forward1(0),io.resEX,Mux(io.forward1(1),io.resMEM,registerFile(instr(19, 15))))
-  val rs2data = Mux(io.forward2(0),io.resEX,Mux(io.forward2(1),io.resMEM,registerFile(instr(24, 20))))
+  val rs1data = Mux(io.forward1(0),io.resEX,Mux(io.forward1(1),io.resMEM,registerFile(instr(19, 15)))) //forwarding
+  val rs2data = Mux(io.forward2(0),io.resEX,Mux(io.forward2(1),io.resMEM,registerFile(instr(24, 20)))) //forwarding
   io.exControl.rs1Idx := instr(19, 15)
   io.exControl.rs2Idx := instr(24, 20)
+
+  //BranchCheck logic. (this just assumes branch and checks for the conditions)
+  val branchCheck = WireDefault(false.B)
+  switch(instr(14,12))
+  {
+    is(0.U){ //beq
+      branchCheck := (rs1data === rs2data)
+    }
+    is(1.U){ //bne
+      branchCheck := (rs1data =/= rs2data)
+    }
+    is(4.U){ //blt
+      branchCheck := (rs1data < rs2data)
+    }
+    is(5.U){ //bge
+      branchCheck := (rs1data >= rs2data)
+    }
+    is(6.U){ //bltu
+      branchCheck := (rs1data.asUInt < rs2data.asUInt)
+    }
+    is(7.U){ //bgeu
+      branchCheck := (rs1data.asUInt >= rs2data.asUInt)
+    }
+  }
+
 
   //control signals base-case:
   val branch = WireDefault(false.B)
@@ -123,6 +148,8 @@ class IDModule extends Module {
       //No ALU control needed in this case
       io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
       pcSelect := true.B //Control signal for PC adder in case of JALR
+      branchCheck := true.B //yes we branching
+      branch := true.B //yes we branching
     }
     is (17.U) {  //S-TYPE imm[11:5][4:0] 010001 / save instruction
       io.imm := ( instr(31,25) ## instr(11,7) ## "hFFFFF".U ).asSInt >> 20
@@ -148,7 +175,9 @@ class IDModule extends Module {
       io.exControl.sigBundle.memToReg := false.B //dont care
     }
     is (55.U) { //J-TYPE jal
-      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,22) ## "hFFF1".U ).asSInt >> 11
+      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,21) ## "h000".U ).asSInt >> 11.U
+      branchCheck := true.B //always branching
+      branch := true.B //always branching
     }
     is (27.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
     is (11.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
@@ -195,30 +224,6 @@ class IDModule extends Module {
     is("b110011".U){io.exControl.aluOpSelect := JAL}
     is("b011011".U){io.exControl.aluOpSelect := LUI}
     is("b001011".U){io.exControl.aluOpSelect := AUIPC}
-  }
-
-  //BranchCheck logic. (this just assumes branch and checks for the conditions)
-  val branchCheck = WireDefault(false.B)
-  switch(instr(14,12))
-  {
-    is(0.U){ //beq
-      branchCheck := (rs1data === rs2data)
-    }
-    is(1.U){ //bne
-      branchCheck := (rs1data =/= rs2data)
-    }
-    is(4.U){ //blt
-      branchCheck := (rs1data < rs2data)
-    }
-    is(5.U){ //bge
-      branchCheck := (rs1data >= rs2data)
-    }
-    is(6.U){ //bltu
-      branchCheck := (rs1data.asUInt < rs2data.asUInt)
-    }
-    is(7.U){ //bgeu
-      branchCheck := (rs1data.asUInt >= rs2data.asUInt)
-    }
   }
 
   //Reg write

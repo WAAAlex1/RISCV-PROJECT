@@ -16,24 +16,18 @@ class IFModuleTest extends Module {
   val pc = RegInit(0.U(32.W))
 
   //hardcode for testing : test = blinking led
-  val hardCodeInstr = Wire(Vec(17,UInt(32.W)))
+  val hardCodeInstr = Wire(Vec(11,UInt(32.W)))
   hardCodeInstr(0) := ("h04f000b7".U) //lui x1 0x4f00
-  hardCodeInstr(1) := ("h00000013".U) //nop
-  hardCodeInstr(2) := ("h00000013".U) //nop
-  hardCodeInstr(3) := ("h001001b3".U) //add x3 x0 x1
-  hardCodeInstr(4) := ("h00000013".U) //nop
-  hardCodeInstr(5) := ("h00000013".U) //nop
-  hardCodeInstr(6) := ("hfff08093".U) //addi x1 x1 -1   [<cntdown>]
-  hardCodeInstr(7) := ("h00000013".U) //nop
-  hardCodeInstr(8) := ("h00000013".U) //nop
-  hardCodeInstr(9) := ("hfe009ae3".U) //bne x1 x0 -12 <cntdown>
-  hardCodeInstr(10) := ("h00100113".U) //addi x2 x0 1
-  hardCodeInstr(11) := ("h00108093".U) //addi x1 x1 1    [<cntup>]
-  hardCodeInstr(12) := ("h00000013".U) //nop
-  hardCodeInstr(13) := ("h00000013".U) //nop
-  hardCodeInstr(14) := ("hfe309ae3".U) //bne x1 x3 -12 <cntup>
-  hardCodeInstr(15) := ("h00000113".U) //addi x2 x0 0
-  hardCodeInstr(16) := ("hfc000ce3".U) //beq x0 x0 <cntdown>
+  hardCodeInstr(1) := ("h001001b3".U) //add x3 x0 x1
+  hardCodeInstr(2) := ("hfff08093".U) //addi x1 x1 -1           [<cntdown>]
+  hardCodeInstr(3) := ("hfe009ee3".U) //bne x1 x0 -4 <cntdown>
+  hardCodeInstr(4) := ("h00100113".U) //addi x2 x0 1
+  hardCodeInstr(5) := ("h40202023".U) //sw x2 1024 x0
+  hardCodeInstr(6) := ("h00108093".U) //addi x1 x1 1            [<cntup>]
+  hardCodeInstr(7) := ("hfe309ee3".U) //bne x1 x3 -4  <cntup>
+  hardCodeInstr(8) := ("h00000113".U) //addi x2 x0 0
+  hardCodeInstr(9) := ("h40202023".U) //sw x2 1024 x0
+  hardCodeInstr(10) := ("hfe0000e3".U) //beq x0 x0 -32 <cntdown>
 
 
   //adder wire

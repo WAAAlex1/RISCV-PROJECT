@@ -27,7 +27,7 @@ class EXModule extends Module {
 
     //Out
     //Replace with Bundle:
-    val memControl = Output(new MEMBundle)
+    val memControl = Output(new EXBundle)
   })
 
   // Pipeline Registers: --------------------------------------------------------
@@ -73,14 +73,14 @@ class EXModule extends Module {
         io.aluResult := 0.S
       }
     }
-    is(JAL){ io.aluResult := (pc + 4.U).asSInt}
+    is(JAL){ io.aluResult := pc.asSInt} //removed +4.U
     is(LUI){io.aluResult := imm}
     is(AUIPC){io.aluResult := (pc.asSInt + imm)}
   }
 
   //Outputs ----------------------------------------------------------------------------
   //Control signals:
-  io.memControl := exControl.sigBundle
+  io.memControl := exControl
 
   //Data signals:
   io.rdOut := rdIn

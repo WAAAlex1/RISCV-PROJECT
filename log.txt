@@ -106,3 +106,26 @@ IP      3. Forwarding
 
             Vi laver et dedikeret forwarding unit modul.
                 Fordi den skal lave logic operations selv på rd fra de forskellige steder
+
+Dag 8:
+    Hvad skal vi arbejde på:
+DONE    1. Forwarding
+DONE    2. IO "memory" for blinking LED
+            Updated code:
+                 ## Load value 133333333 into x1
+                 lui x1 0x4f00
+                 add x3 x0 x1
+                 ## Start iterative process
+                 cntdown:
+                     addi x1 x1 -1
+                     bne x1 x0 cntdown
+                     addi x2 x0 1
+                     sw x2 1024(x0)
+                 cntup:
+                     addi x1 x1 1
+                     bne x1 x3 cntup
+                     addi x2 x0 0
+                     sw x2 1024(x0)
+                     beq x0 x0 cntdown
+IP      3. UART
+
