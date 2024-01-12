@@ -16,7 +16,6 @@ class EXTester extends AnyFlatSpec with
       dut.io.exControl.aluOpSelect.poke(ADD)
 
       dut.io.exControl.aluSRC.poke(false.B) //use rs2
-      dut.io.exControl.sigBundle.memRead.poke(false.B)
       dut.io.exControl.sigBundle.memWrite.poke(false.B)
       dut.io.exControl.sigBundle.regWrite.poke(false.B)
       dut.io.exControl.sigBundle.memToReg.poke(false.B)

@@ -12,6 +12,8 @@ class TopLevel extends Module {
     val wrEna   = Input(Bool())
     val regFile = Output(Vec(32,SInt(32.W)))
 
+    //control the program:
+    val running = Input(Bool())
 
     //REAL IO:
     val ioLED = UInt(16.W)
@@ -78,6 +80,7 @@ class TopLevel extends Module {
   ifModule.io.wrAddr := io.wrAddr
   ifModule.io.wrData := io.wrData
   ifModule.io.wrEna  := io.wrEna
+  ifModule.io.running := io.running
 
   io.regFile := idModule.io.regFile //comment out for hardcode
 

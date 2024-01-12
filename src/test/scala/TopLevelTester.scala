@@ -6,6 +6,7 @@ class TopLevelTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h00100093".U) //addi x1 x0 1
@@ -45,6 +46,7 @@ class TopLevelTester2 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h00300093".U) //addi x1 x0 3
@@ -71,6 +73,7 @@ class TopLevelTester3 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h123452b7".U) //lui t0 x12345
@@ -131,6 +134,7 @@ class TopLevelTester4 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("habcdf337".U) //lui x6 0xabcdf
@@ -153,6 +157,7 @@ class TopLevelTester5 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h00000513".U) //addi x10 x0 0
@@ -197,6 +202,7 @@ class TopLevelTester6 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h02a00093".U) //addi x1 x0 42
@@ -227,6 +233,7 @@ class TopLevelTester7 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h040000b7".U) //lui x1 0x4000
@@ -260,6 +267,7 @@ class TopLevelTester8 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
+      dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h666690b7".U) //lui x1 0x66669
@@ -406,45 +414,140 @@ class TopLevelTester10 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevel) { dut =>
-      dut.io.wrAddr.poke(1.U)
+      dut.io.running.poke(false.B)
+      dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(2.U)
+      dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h00700593".U) // addi x11 x0 7
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(3.U)
-      dut.io.wrData.poke("h008000ef".U) // jal x1 8 <check>
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h00c000ef".U) // jal x1 12 <check>
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(4.U)
+      dut.io.wrAddr.poke(3.U)
       dut.io.wrData.poke("h00a50513".U) // addi x10 x10 10
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(5.U)
+      dut.io.wrAddr.poke(4.U)
       dut.io.wrData.poke("h000080e7".U) //jalr x1 x1 0
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(6.U)
+      dut.io.wrAddr.poke(5.U)
       dut.io.wrData.poke("h00b50633".U) // add x12 x10 x11   [<check>]
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(7.U)
+      dut.io.wrAddr.poke(6.U)
       dut.io.wrData.poke("h000080e7".U) // jalr x1 x1 0
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(8.U)
+      dut.io.wrAddr.poke(7.U)
       dut.io.wrData.poke("h00b506b3".U) // add x13 x10 x11
 
+      dut.io.running.poke(true.B)
 
       dut.clock.step(1)
       dut.io.wrEna.poke(false.B)
       dut.clock.step(20)
       dut.io.regFile(12).expect(49.S)
-      dut.io.regFile(1).expect(28.S)
+      dut.io.regFile(1).expect(20.S)
       dut.io.regFile(13).expect(59.S)
+    }
+  }
+}
+
+//test with negative immediate for jal
+class TopLevelTester11 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      dut.io.running.poke(false.B)
+      dut.io.wrAddr.poke(0.U)
+      dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h00700593".U) // addi x11 x0 7
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h00c000ef".U) // jal x1 12 <check>
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00a50513".U) // addi x10 x10 10
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h000080e7".U) //jalr x1 x1 0
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00b50633".U) // add x12 x10 x11   [<check>]
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("hff5ff0ef".U) // jal x1 -12
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(7.U)
+      dut.io.wrData.poke("h00b506b3".U) // add x13 x10 x11
+
+      dut.io.running.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      dut.clock.step(20)
+      dut.io.regFile(12).expect(49.S)
+      dut.io.regFile(1).expect(20.S)
+      dut.io.regFile(13).expect(59.S)
+    }
+  }
+}
+
+//test: tests/simple/shift.s
+class TopLevelTester12 extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      dut.io.running.poke(false.B)
+      dut.io.wrAddr.poke(0.U)
+      dut.io.wrData.poke("hff000537".U) // lui x10 0xff000
+      dut.io.wrEna.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke("h0ff00593".U) // addi x11 x0 255
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(2.U)
+      dut.io.wrData.poke("h40855513".U) // srai x10 x10 8
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(3.U)
+      dut.io.wrData.poke("h00859593".U) // slli x11 x11 8
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("h0ff58593".U) //addi x11 x11 255
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h00b50633".U) // add x12 x10 x11
+
+
+      dut.io.running.poke(true.B)
+
+      dut.clock.step(1)
+      dut.io.wrEna.poke(false.B)
+      dut.clock.step(11)
+      dut.io.regFile(10).expect(-65536.S)
+      dut.io.regFile(11).expect(65535.S)
+      dut.io.regFile(12).expect(-1.S)
     }
   }
 }

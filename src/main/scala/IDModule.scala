@@ -83,7 +83,6 @@ class IDModule extends Module {
   val branch = WireDefault(false.B)
   val pcSelect = WireDefault(false.B) //Control signal for PC adder (true only if JALR)
   io.exControl.aluSRC := false.B
-  io.exControl.sigBundle.memRead := false.B
   io.exControl.sigBundle.memWrite := false.B
   io.exControl.sigBundle.regWrite := true.B
   io.exControl.sigBundle.memToReg := false.B
@@ -111,7 +110,6 @@ class IDModule extends Module {
       //Control signals:
       io.exControl.aluSRC := false.B
       branch := false.B
-      io.exControl.sigBundle.memRead := false.B
       io.exControl.sigBundle.memWrite := false.B
       io.exControl.sigBundle.regWrite := true.B
       io.exControl.sigBundle.memToReg := false.B
@@ -123,7 +121,6 @@ class IDModule extends Module {
       //Control signals:
       io.exControl.aluSRC := true.B
       branch := false.B
-      io.exControl.sigBundle.memRead := false.B
       io.exControl.sigBundle.memWrite := false.B
       io.exControl.sigBundle.regWrite := true.B
       io.exControl.sigBundle.memToReg := false.B
@@ -135,7 +132,6 @@ class IDModule extends Module {
       //Control signals:
       io.exControl.aluSRC := true.B
       branch := false.B
-      io.exControl.sigBundle.memRead := true.B
       io.exControl.sigBundle.memWrite := false.B
       io.exControl.sigBundle.regWrite := true.B
       io.exControl.sigBundle.memToReg := true.B
@@ -158,7 +154,6 @@ class IDModule extends Module {
       //Control signals:
       io.exControl.aluSRC := true.B
       branch := false.B
-      io.exControl.sigBundle.memRead := false.B
       io.exControl.sigBundle.memWrite := true.B
       io.exControl.sigBundle.regWrite := false.B
       io.exControl.sigBundle.memToReg := false.B //dont care
@@ -169,13 +164,12 @@ class IDModule extends Module {
       //Control signals:
       io.exControl.aluSRC := false.B
       branch := true.B
-      io.exControl.sigBundle.memRead := false.B
       io.exControl.sigBundle.memWrite := false.B
       io.exControl.sigBundle.regWrite := false.B
       io.exControl.sigBundle.memToReg := false.B //dont care
     }
     is (55.U) { //J-TYPE jal
-      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,21) ## "h000".U ).asSInt >> 11.U
+      io.imm := ( instr(31) ## instr(19,12) ## instr(20) ## instr(30,21) ## "b0".U ).asSInt
       branchCheck := true.B //always branching
       branch := true.B //always branching
     }

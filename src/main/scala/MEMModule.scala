@@ -48,7 +48,7 @@ class MEMModule extends Module {
   val ioLED = RegInit(0.U(16.W))
   when((aluResult.asUInt >= 1024.U) & memWrite)
   {
-    memory.io.wrEna := 0.U //Here we should not write to memory
+    //memory.io.wrEna := 0.U //Here we should not write to memory. Commenting this out could break it when implemented on the fpga
 
     //These signals should be RegNext, as they do not run through memory
     when(aluResult.asUInt === 1024.U){

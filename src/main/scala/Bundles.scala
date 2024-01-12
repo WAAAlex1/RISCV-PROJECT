@@ -2,7 +2,6 @@ import chisel3._
 import AluOperations._
 class MEMBundle extends Bundle{
   //CONTROL SIGNALS
-  val memRead     = Bool() //maybe not needed?
   val memWrite    = Bool()
   val regWrite    = Bool()
   val memToReg    = Bool()

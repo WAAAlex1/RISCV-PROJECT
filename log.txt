@@ -127,5 +127,11 @@ DONE    2. IO "memory" for blinking LED
                      addi x2 x0 0
                      sw x2 1024(x0)
                      beq x0 x0 cntdown
-IP      3. UART
+IP      3. Test alle resterende instruktioner
+        4. UART
 
+Dag 9:
+    Hvad skal vi arbejde på?:
+DONE    1. Test alle resterende instruktioner der mangler det(alt ud over ecall)
+        2. Status fremlæggelse
+        3. UART
