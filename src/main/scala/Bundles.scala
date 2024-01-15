@@ -1,5 +1,7 @@
 import chisel3._
 import AluOperations._
+import Import.Bus
+
 class MEMBundle extends Bundle{
   //CONTROL SIGNALS
   val memWrite    = Bool()
@@ -24,6 +26,7 @@ class EXBundle extends Bundle {
 
 class IOBundle extends Bundle{
   val ioLED = UInt(16.W)
+  val port = Bus.RequestPort
 }
 
 

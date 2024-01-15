@@ -135,3 +135,36 @@ Dag 9:
 DONE    1. Test alle resterende instruktioner der mangler det(alt ud over ecall)
         2. Status fremlæggelse
         3. UART
+
+Dag 10:
+    Hvad skal vi arbejde på:
+IP      1. UART
+            Plan:
+            Det eneste vi skal er at bruge metoderne i requestport til at skrive til topPort
+            og så forbinde tx og rx i xdc og så virker det bare.
+            Der kan kun sendes og modtages i bytes så vi skal skrive noget der kan samle 4 bytes til en instruction.
+            Adressen man reader og writer til er 0 for read/write og 0x04 for read af uart status.
+
+            Bare følg StringStreamer som et eksempel på et modul der skriver TIL uart.
+
+            Vores SerialPort sender nu en instr og instrValid output som toplevel modtager og connecter til sit instr
+            wrData og wrEna henholdsvis.
+
+            For at skrive til vores processor fra vores computer skal vi bruge en metode der hedder 'open' i C.
+            Den vil så skrive til den COM port man specificerer. Det er her vi skal sende vores instruktioner.
+
+               Plan for C-program.
+                1. Lav C-program, der outputter en .bat fil (fil der består af windows commands)
+                2. Commands skal være følgende:
+                    "mode COM10 BAUD=9600 PARITY=n DATA=8" // Her indstilles vores com port. DATA=8 = 8 bits.
+                    "set /p x="hello" <nul >\\.\COM10" // Her sendes en besked til COM10
+
+    Plan for imorgen
+        Georg:
+            Forbind toplevel og IFModule tingene til at læse instruktions fra UART
+            Lav den del af SerialPort til write
+                Kræver også at man implementerer ecall.
+
+
+
+

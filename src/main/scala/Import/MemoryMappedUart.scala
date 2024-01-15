@@ -12,7 +12,7 @@ import chisel3.util._
   * | address | read                           | write                           |
   * |---------|--------------------------------|---------------------------------|
   * | 0x00    | read received data from buffer |  write data to send into buffer |
-  * | 0x04    | read UART status               | -                               |
+  * | nonzero | read UART status               | -                               |
   *
   * The UART status has the following format:
   *
@@ -90,7 +90,6 @@ class MemoryMappedUart(
     rxBuffer.io.deq.bits,
     rxBuffer.io.deq.valid ## txBuffer.io.enq.ready
   )
-
 }
 
 object MemoryMappedUart {

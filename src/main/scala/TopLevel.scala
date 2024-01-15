@@ -1,12 +1,12 @@
-import chisel3._
+import Import.MemoryMappedUart
+import Import.MemoryMappedUart.UartPins
+import Import.Bus
 
+import chisel3._
 
 class TopLevel extends Module {
   val io = IO(new Bundle {
-    val tx = Output(Bool())
-
     //Stuff for chisel testing (comment out for hardcode or synthesize):
-
     val wrAddr  = Input(UInt(10.W))
     val wrData  = Input(UInt(32.W))
     val wrEna   = Input(Bool())
@@ -17,12 +17,21 @@ class TopLevel extends Module {
 
     //REAL IO:
     val ioLED = UInt(16.W)
+    val uart = UartPins()
+
+    val topPort = Input(Bus.RequestPort())
   })
   // ------------------------------------------------------------------------------
-  // Clk
-
   //Initialize toplevel io (temp):
-  io.tx := false.B
+  val mmUart = MemoryMappedUart(
+    100000000,
+    115200,
+    txBufferDepth = 8,
+    rxBufferDepth = 8
+  ) //clockFreq = 50MHz, baud = 115200, bufferDepths = 8?
+
+  io.topPort <> mmUart.io.port
+  io.uart <> mmUart.io.pins
 
 
   // ------------------------------------------------------------------------------
@@ -87,6 +96,7 @@ class TopLevel extends Module {
 
   //REAL IO Connections:
   io.ioLED := memModule.io.ioWrite.ioLED
+  io.topPort := memModule.io.ioWrite.port
 
 
   // ------------------------------------------------------------------------------

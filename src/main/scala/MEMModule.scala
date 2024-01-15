@@ -1,5 +1,6 @@
 import chisel3._
 import chisel3.util._
+import Import.Bus
 
 class MEMModule extends Module {
   val io = IO(new Bundle {
@@ -46,19 +47,21 @@ class MEMModule extends Module {
   //Special case when storing / loading MEM - we need to be able to store both in memory and to send to IO.
   //When we would write, but our memory address is too large for mem, we use IO
   val ioLED = RegInit(0.U(16.W))
-  when((aluResult.asUInt >= 1024.U) & memWrite)
-  {
+  val port = Bus.RequestPort()
+
+  when(aluResult(10) & memWrite) {
     //memory.io.wrEna := 0.U //Here we should not write to memory. Commenting this out could break it when implemented on the fpga
 
     //These signals should be RegNext, as they do not run through memory
-    when(aluResult.asUInt === 1024.U){
-      ioLED := RegNext(io.rs2Data(15,0))
+    when(aluResult.asUInt === 1024.U) {
+      ioLED := RegNext(io.rs2Data(15, 0))
+    }.elsewhen(aluResult.asUInt === 1025.U) {
+      port.writeRequest(0.U,RegNext(io.rs2Data).asUInt)
     }.otherwise {
       //nothing?
       //for later when we use UART
     }
   }
-
   //Control whether we're loading byte, halfword or word and whether unsigned or not.
   val sizedMemOutput = WireDefault(0.S(32.W))
   switch(memSize)
@@ -77,6 +80,7 @@ class MEMModule extends Module {
   io.rdOut := rdIn
   io.regWriteOut := regWrite
 
-  //IO outputs:
+  //IO:
+  io.ioWrite.port := port
   io.ioWrite.ioLED := ioLED
 }
