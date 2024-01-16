@@ -27,6 +27,7 @@ class IDModule extends Module {
     val regFile       = Output(Vec(32,SInt(32.W)))
     val branchAddr    = Output(UInt(32.W))
     val pcSrc         = Output(Bool())
+    val halt          = Output(Bool())
 
     //Forwarding signals in:
     val resEX = Input(SInt(32.W))
@@ -50,7 +51,8 @@ class IDModule extends Module {
   //RegisterFile
   val registerFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W)))) //reset to nop instructions
   val rs1data = Mux(io.forward1(0),io.resEX,Mux(io.forward1(1),io.resMEM,registerFile(instr(19, 15)))) //forwarding
-  val rs2data = Mux(io.forward2(0),io.resEX,Mux(io.forward2(1),io.resMEM,registerFile(instr(24, 20)))) //forwarding
+  val rs2data = WireDefault(0.S(32.W)) //Wire so its not read-only
+  rs2data := Mux(io.forward2(0),io.resEX,Mux(io.forward2(1),io.resMEM,registerFile(instr(24, 20)))) //forwarding
   io.exControl.rs1Idx := instr(19, 15)
   io.exControl.rs2Idx := instr(24, 20)
 
@@ -87,6 +89,7 @@ class IDModule extends Module {
   io.exControl.sigBundle.regWrite := true.B
   io.exControl.sigBundle.memToReg := false.B
   io.exControl.sigBundle.memSize := 2.U //word
+  val ecall = WireDefault(false.B)
 
   //ADDED FOR TESTING, REMOVE
   io.aluControl := 0.U
@@ -139,6 +142,7 @@ class IDModule extends Module {
     is (57.U) { //I-TYPE imm[11:0] 111001 / ecall / ebreak
       //No ALU control needed in this case
       io.imm := ( instr(31,20) ## "hFFFFF".U ).asSInt >> 20
+      ecall := true.B
     }
     is (51.U) { //I-TYPE imm[11:0] 110011 / jalr
       //No ALU control needed in this case
@@ -175,6 +179,15 @@ class IDModule extends Module {
     }
     is (27.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 011011 / lui
     is (11.U) { io.imm := ( instr & "hFFFFF000".U ).asSInt } //U-TYPE imm[31:12] 001011 / auipc
+  }
+
+  //ecall stuff
+  io.halt := false.B
+  when(ecall)
+  {
+    switch(registerFile(10)){
+      is(10.S){io.halt := true.B}
+    }
   }
 
   //ALU control

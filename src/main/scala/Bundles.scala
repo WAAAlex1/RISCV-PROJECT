@@ -26,7 +26,8 @@ class EXBundle extends Bundle {
 
 class IOBundle extends Bundle{
   val ioLED = UInt(16.W)
-  val port = Bus.RequestPort
+  val wrEna = Bool()
+  val wrData = UInt(8.W)
 }
 
 

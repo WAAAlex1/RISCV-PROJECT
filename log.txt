@@ -164,7 +164,40 @@ IP      1. UART
             Forbind toplevel og IFModule tingene til at læse instruktions fra UART
             Lav den del af SerialPort til write
                 Kræver også at man implementerer ecall.
+                    Ved ecall pass a0 gennem rs2 i pipeline
 
+Dag 11:
+    Hvad arbejder vi på:
+DONE?      UART
+DONE(UNTESTED) read instructions from uart
+            Spørg schoerbel om fejl med rdData i SerialPort linje 62
+                    Lav 4 byte regs til hver del af instruktionen.
+                    Ændr serialport til at vente på bytes istedet for at forvente dem 1 efter 1
+            ecall halt
+                done and tested in cae tests
+            Test af UART ved udskrivning af fibonacci til uart:
+                main:
+                    addi x3 x0 1
+                    addi x2 x0 0
+                    addi x5 x0 5
+                    jal x7 printNum
+                    jal x1 fibo
+                    li a7, 10
+                    ecall
+                fibo:
+                    add x2 x3 x2 #fibo op 1
+                    add x3 x2 x3 #fibo op 2
+                    jal x7 printNum
+                    addi x4 x4 1
+                    bne x4 x5 fibo
+                    jalr x1
+                printNum:
+                    sw x2 1025(x0) #memory mapped uart
+                    sw x3 1025(x0) #memory mapped uart
+                    jalr x0 x7 0
 
+IP      Skriv simulations tests af alle cae tests
+            1-10 finished.
+            11 bugged
 
 

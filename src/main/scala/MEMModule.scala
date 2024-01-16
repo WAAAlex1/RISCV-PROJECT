@@ -30,6 +30,7 @@ class MEMModule extends Module {
   val memToReg  = RegNext(io.memControl.memToReg)
   val memSize   = RegNext(io.memControl.memSize) //Regnext because its needed after memory is done fetching
   val memWrite  = RegNext(io.memControl.memWrite) //regnext for use in IO stuff
+  val rs2Data = RegNext(io.rs2Data) //for io stuff
 
   //On chip memory:
   val memory    = Module(new Memory(1024,32))
@@ -47,19 +48,21 @@ class MEMModule extends Module {
   //Special case when storing / loading MEM - we need to be able to store both in memory and to send to IO.
   //When we would write, but our memory address is too large for mem, we use IO
   val ioLED = RegInit(0.U(16.W))
-  val port = Bus.RequestPort()
+  val wrEna = WireDefault(false.B)
+  val wrData = WireDefault(0.U(8.W)) //uart can only send 1 byte at a time
 
+  //All these signals should be RegNext'ed, as they do not run through memory
   when(aluResult(10) & memWrite) {
     //memory.io.wrEna := 0.U //Here we should not write to memory. Commenting this out could break it when implemented on the fpga
 
-    //These signals should be RegNext, as they do not run through memory
     when(aluResult.asUInt === 1024.U) {
-      ioLED := RegNext(io.rs2Data(15, 0))
+      ioLED := rs2Data(15, 0) //regnexted already
     }.elsewhen(aluResult.asUInt === 1025.U) {
-      port.writeRequest(0.U,RegNext(io.rs2Data).asUInt)
+      wrData := rs2Data(7,0) //signal to serialport to write data
+      wrEna := true.B
     }.otherwise {
       //nothing?
-      //for later when we use UART
+      //for more IO if needed
     }
   }
   //Control whether we're loading byte, halfword or word and whether unsigned or not.
@@ -81,6 +84,7 @@ class MEMModule extends Module {
   io.regWriteOut := regWrite
 
   //IO:
-  io.ioWrite.port := port
+  io.ioWrite.wrEna := wrEna
+  io.ioWrite.wrData := wrData
   io.ioWrite.ioLED := ioLED
 }

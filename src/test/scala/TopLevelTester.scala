@@ -5,7 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 class TopLevelTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -45,7 +45,7 @@ class TopLevelTester extends AnyFlatSpec with
 class TopLevelTester2 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -72,7 +72,7 @@ class TopLevelTester2 extends AnyFlatSpec with
 class TopLevelTester3 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -133,7 +133,7 @@ class TopLevelTester3 extends AnyFlatSpec with
 class TopLevelTester4 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -156,7 +156,7 @@ class TopLevelTester4 extends AnyFlatSpec with
 class TopLevelTester5 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -201,7 +201,7 @@ class TopLevelTester5 extends AnyFlatSpec with
 class TopLevelTester6 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -232,7 +232,7 @@ class TopLevelTester6 extends AnyFlatSpec with
 class TopLevelTester7 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -266,7 +266,7 @@ class TopLevelTester7 extends AnyFlatSpec with
 class TopLevelTester8 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -321,7 +321,7 @@ class TopLevelTester8 extends AnyFlatSpec with
 class TopLevelTester9 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h06400093".U) // addi x1 x0 100
       dut.io.wrEna.poke(true.B)
@@ -413,7 +413,7 @@ class TopLevelTester9 extends AnyFlatSpec with
 class TopLevelTester10 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
@@ -463,7 +463,7 @@ class TopLevelTester10 extends AnyFlatSpec with
 class TopLevelTester11 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
@@ -512,8 +512,9 @@ class TopLevelTester11 extends AnyFlatSpec with
 //test: tests/simple/shift.s
 class TopLevelTester12 extends AnyFlatSpec with
   ChiselScalatestTester {
+
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSim) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("hff000537".U) // lui x10 0xff000
