@@ -33,6 +33,7 @@ class IDModule extends Module {
     val resMEM = Input(SInt(32.W))
     val forward1 = Input(UInt(2.W))
     val forward2 = Input(UInt(2.W))
+    val ecallForward = Input(UInt(2.W))
 
     //Control in:
     val ldBraHazard = Input(Bool())
@@ -185,13 +186,9 @@ class IDModule extends Module {
   }
 
   //ecall stuff
-  io.halt := false.B
-  when(ecall)
-  {
-    switch(registerFile(10)){
-      is(10.S){io.halt := true.B}
-    }
-  }
+  val a7 = Mux(io.ecallForward(0),io.resEX,Mux(io.ecallForward(1),io.resMEM,registerFile(17)))
+  io.halt := Mux(ecall & (a7 === 10.S),true.B,false.B)
+
 
   //ALU control
   io.exControl.aluOpSelect := ADD

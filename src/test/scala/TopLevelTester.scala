@@ -1,7 +1,8 @@
+
 import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
-
+/*
 class TopLevelTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -45,19 +46,19 @@ class TopLevelTester extends AnyFlatSpec with
 class TopLevelTester2 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
-      dut.io.wrAddr.poke(1.U)
+      dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h00300093".U) //addi x1 x0 3
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(2.U)
+      dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h00200113".U) //addi x2 x0 2
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(3.U)
+      dut.io.wrAddr.poke(2.U)
       dut.io.wrData.poke("h402080b3".U) //sub x1 x1 x2
 
       dut.clock.step(1)
@@ -72,47 +73,47 @@ class TopLevelTester2 extends AnyFlatSpec with
 class TopLevelTester3 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
-      dut.io.wrAddr.poke(1.U)
+      dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h123452b7".U) //lui t0 x12345
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(2.U)
+      dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h67828293".U) //addi x5 x5 1656
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(3.U)
+      dut.io.wrAddr.poke(2.U)
       dut.io.wrData.poke("habcdf337".U) //lui x6 0xabcdf
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(4.U)
+      dut.io.wrAddr.poke(3.U)
       dut.io.wrData.poke("hfab30313".U) //addi x6 x6 -85
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(5.U)
+      dut.io.wrAddr.poke(4.U)
       dut.io.wrData.poke("h0062c5b3".U) //xor x11 x5 x6
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(6.U)
+      dut.io.wrAddr.poke(5.U)
       dut.io.wrData.poke("h0062e633".U) //or x12 x5 x6
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(7.U)
+      dut.io.wrAddr.poke(6.U)
       dut.io.wrData.poke("h0062f6b3".U) //and x13 x5 x6
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(8.U)
+      dut.io.wrAddr.poke(7.U)
       dut.io.wrData.poke("h5212c713".U) //xori x14 x5 1313
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(9.U)
+      dut.io.wrAddr.poke(8.U)
       dut.io.wrData.poke("h5212e793".U) //ori x15 x5 1313
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(10.U)
+      dut.io.wrAddr.poke(9.U)
       dut.io.wrData.poke("h5212f813".U) //andi x16 x5 1313
 
       dut.clock.step(1)
@@ -133,15 +134,15 @@ class TopLevelTester3 extends AnyFlatSpec with
 class TopLevelTester4 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
-      dut.io.wrAddr.poke(1.U)
+      dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("habcdf337".U) //lui x6 0xabcdf
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(2.U)
+      dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("hfab30313".U) //addi x6 x6 -85
 
       dut.clock.step(1)
@@ -156,7 +157,7 @@ class TopLevelTester4 extends AnyFlatSpec with
 class TopLevelTester5 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -201,7 +202,7 @@ class TopLevelTester5 extends AnyFlatSpec with
 class TopLevelTester6 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -232,23 +233,23 @@ class TopLevelTester6 extends AnyFlatSpec with
 class TopLevelTester7 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
-      dut.io.wrAddr.poke(1.U)
+      dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h040000b7".U) //lui x1 0x4000
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(2.U)
+      dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h3ff00113".U) //addi x2 x0 1023
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(3.U)
+      dut.io.wrAddr.poke(2.U)
       dut.io.wrData.poke("h00112023".U) //sw x1 0 x2
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(4.U)
+      dut.io.wrAddr.poke(3.U)
       dut.io.wrData.poke("h00012503".U) //lw x10 0 x2
 
       dut.clock.step(1)
@@ -266,7 +267,7 @@ class TopLevelTester7 extends AnyFlatSpec with
 class TopLevelTester8 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -321,7 +322,7 @@ class TopLevelTester8 extends AnyFlatSpec with
 class TopLevelTester9 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.wrAddr.poke(1.U)
       dut.io.wrData.poke("h06400093".U) // addi x1 x0 100
       dut.io.wrEna.poke(true.B)
@@ -413,7 +414,7 @@ class TopLevelTester9 extends AnyFlatSpec with
 class TopLevelTester10 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
@@ -463,7 +464,7 @@ class TopLevelTester10 extends AnyFlatSpec with
 class TopLevelTester11 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("h02a00513".U) // addi x10 x0 42
@@ -514,7 +515,7 @@ class TopLevelTester12 extends AnyFlatSpec with
   ChiselScalatestTester {
 
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
       dut.io.wrData.poke("hff000537".U) // lui x10 0xff000
@@ -540,7 +541,6 @@ class TopLevelTester12 extends AnyFlatSpec with
       dut.io.wrAddr.poke(5.U)
       dut.io.wrData.poke("h00b50633".U) // add x12 x10 x11
 
-
       dut.io.running.poke(true.B)
 
       dut.clock.step(1)
@@ -552,6 +552,14 @@ class TopLevelTester12 extends AnyFlatSpec with
     }
   }
 }
-
-
+*/
+class TopLevelTesterUART extends AnyFlatSpec with
+  ChiselScalatestTester {
+  "TopLevel" should "pass" in {
+    test(new TopLevel) { dut =>
+      dut.clock.step(1)
+      dut.clock.step(300)
+    }
+  }
+}
 

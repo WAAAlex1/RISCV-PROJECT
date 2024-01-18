@@ -38,7 +38,7 @@ class MEMModule extends Module {
   io.port.init()
 
   //On chip memory:
-  val memory    = Module(new Memory(1024,32))
+  val memory    = Module(new Memory(4096,32)) //4096 sized memory
   val memOutput = WireDefault(0.S(32.W))
 
   //Control signals for our memory
@@ -47,39 +47,43 @@ class MEMModule extends Module {
   memory.io.wrData  := io.rs2Data.asUInt //non-regnext'ed
   memory.io.wrEna   := io.memControl.memWrite //non-regnext'ed because goes through memory
 
-  //Output of our memory
-  memOutput := memory.io.rdData.asSInt
-
   //Special case when storing / loading MEM - we need to be able to store both in memory and to send to IO.
   //When we would write, but our memory address is too large for mem, we use IO
   val ioLED = RegInit(0.U(16.W))
+  ioLED := ioLED //keep its value
   val ioOut = RegInit(0.S(32.W)) //sends 1 byte at a time but still 32.W
 
   //All these signals should NOT be reg-nexted because uart takes 1 cycle to do stuff
   switch(io.aluResult){
-    is(1024.S){
+    is(4096.S){
       when(io.memControl.memWrite){
         ioLED := io.rs2Data(15, 0) //regnexted already
       }
     }
-    is(1025.S){ //read write adress for uart
+    is(4097.S){ //read write adress for uart
       when(io.memControl.memWrite) {
-        io.port.writeRequest(0.U,io.rs2Data.asUInt)
+        io.port.writeRequest(0.U,io.rs2Data.asUInt(7,0))
       } .otherwise {
         io.port.readRequest(0.U)
         ioOut := io.port.rdData.asSInt
-        memOutput := ioOut
+        //memOutput := ioOut
       }
     }
-    is(1026.S){ //status bits address for uart
+    is(4098.S){ //status bits address for uart
       when(!io.memControl.memWrite) {
         io.port.readRequest(1.U)
-        ioOut := io.port.rdData.asSInt //Prolly shouldnt be regnexted but trying to solve combi loop
-        memOutput := ioOut
+        ioOut := io.port.rdData.asSInt
+        //memOutput := ioOut
       }
     }
     //More io...
   }
+
+  /*
+  //Output of our memory
+  memOutput := memory.io.rdData.asSInt
+  */
+  memOutput := Mux(aluResult >= 4096.S,ioOut,memory.io.rdData.asSInt)
 
   //Control whether we're loading byte, halfword or word and whether unsigned or not.
   val sizedMemOutput = WireDefault(0.S(32.W))

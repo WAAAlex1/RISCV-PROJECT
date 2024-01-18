@@ -13,26 +13,27 @@ class TopLevel extends Module {
     val uart = UartPins()
 
     //FOR TESTING
+    /*
     val running = Input(Bool())
     val regFile = Output(Vec(32,SInt(32.W)))
     val wrAddr  = Input(UInt(10.W))
     val wrData  = Input(UInt(32.W))
     val wrEna   = Input(Bool())
-
+    */
   })
   // ------------------------------------------------------------------------------
   //Initialize toplevel io (temp):
   val mmUart = MemoryMappedUart(
     60000000,
     9600,
-    txBufferDepth = 8,
-    rxBufferDepth = 8
+    txBufferDepth = 16,
+    rxBufferDepth = 16
   ) //clockFreq = 60MHz, baud = 9600, bufferDepths = 8?
   //it seems the clkFreq is never used so vivado removes it
 
   // ------------------------------------------------------------------------------
   //Connect everything:
-  val ifModule = Module(new IFModule) //change to IFModuleTest for hardcoding instructions
+  val ifModule = Module(new IFModuleTest) //change to IFModuleTest for hardcoding instructions
   val idModule = Module(new IDModule)
   val exModule = Module(new EXModule)
   val memModule = Module(new MEMModule)
@@ -40,9 +41,9 @@ class TopLevel extends Module {
 
   val halted = RegInit(false.B)
   halted := halted
-  val runningReg = RegInit(true.B)
-  //runningReg := runningReg //For hardcoding
-  runningReg := io.running //For testing
+  val runningReg = RegInit(true.B) //true.B for hardcoding, false.B for testing
+  runningReg := runningReg //For hardcoding
+  //runningReg := io.running //For testing
   when(halted){
     runningReg := false.B
   }
@@ -62,6 +63,7 @@ class TopLevel extends Module {
   idModule.io.forward1 := forwardingModule.io.branchControl1
   idModule.io.forward2 := forwardingModule.io.branchControl2
   idModule.io.ldBraHazard := forwardingModule.io.ldBraHazard
+  idModule.io.ecallForward := forwardingModule.io.ecallForward
 
   //EX inputs:
   exModule.io.rs1data := idModule.io.rs1data
@@ -92,16 +94,17 @@ class TopLevel extends Module {
   forwardingModule.io.exHasLoad := exModule.io.memControl.sigBundle.memToReg
 
   //Connect toplevel IO: (comment out for hardcode)
-
+  /*
   ifModule.io.wrAddr := io.wrAddr
   ifModule.io.wrData := io.wrData
   ifModule.io.wrEna  := io.wrEna
   io.regFile := idModule.io.regFile //comment out for hardcode
+  */
 
   ifModule.io.running := runningReg
 
   when(idModule.io.halt){
-    halted := true.B //ecall stop running - COMMENT FOR TESTING
+    halted := true.B //ecall stop running - COMMENT FOR TESTING(why?)
     idModule.io.instr := "h00000013".U //flush instruction fetched after ecall
   }
 

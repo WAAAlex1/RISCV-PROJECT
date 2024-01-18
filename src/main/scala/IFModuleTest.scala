@@ -17,36 +17,61 @@ class IFModuleTest extends Module {
   val pc = RegInit(0.U(32.W))
 
   //hardcode for printing fibo num to uart
-  /*
-  val hardCodeInstr = Wire(Vec(16,UInt(32.W)))
-  //[<main>]
+
+  val hardCodeInstr = Wire(Vec(30,UInt(32.W)))
+  //<main>
   hardCodeInstr(0) := ("h00100193".U) //addi x3 x0 1
-  hardCodeInstr(1) := ("h00000113".U) //addi x2 x0 0
-  hardCodeInstr(2) := ("h00500293".U) //addi x5 x0 5         [<cntdown>]
-  hardCodeInstr(3) := ("h028003ef".U) //jal x7 40 <printNum>
-  hardCodeInstr(4) := ("h00c000ef".U) //jal x1 12 <fibo>
-  hardCodeInstr(5) := ("h00a00893".U) //addi x17 x0 10
-  hardCodeInstr(6) := ("h00000073".U) //ecall
-  //[<fibo>]
-  hardCodeInstr(7) := ("h00218133".U) //add x2 x3 x2
-  hardCodeInstr(8) := ("h003101b3".U) //add x3 x2 x3
-  hardCodeInstr(9) := ("h010003ef".U) //jal x7 16 <printNum>
-  hardCodeInstr(10) := ("h00120213".U) //addi x4 x4 1
-  hardCodeInstr(11) := ("hfe5218e3".U) //bne x4 x5 -16 <fibo>
-  hardCodeInstr(12) := ("h000080e7".U) //jalr x1 x1 0
-  //[<printnum>]
-  hardCodeInstr(13) := ("h402020a3".U) //sw x2 1025 x0
-  hardCodeInstr(14) := ("h403020a3".U) //sw x3 1025 x0
-  hardCodeInstr(15) := ("h00038067".U) //jalr x0 x7 0
+  hardCodeInstr(1) := ("h00000113".U) // addi x2 x0 0
+  hardCodeInstr(2) := ("h00500293".U) //addi x5 x0 5
+  hardCodeInstr(3) := ("h01f00f93".U) //addi x31 x0 31
+  hardCodeInstr(4) := ("h00100f13".U) //addi x30 x0 1
+  hardCodeInstr(5) := ("h00001eb7".U) //lui x29 0x1
+  hardCodeInstr(6) := ("h00c0006f".U) //jal x0 12 <fibo>
+  //<end>
+  hardCodeInstr(7) := ("h00a00893".U) //addi x17 x0 10
+  hardCodeInstr(8) := ("h00000073".U) //ecall
+  //<fibo>
+  hardCodeInstr(9) := ("h00218133".U) //add x2 x3 x2
+  hardCodeInstr(10) := ("h018003ef".U) //jal x7 24 <checkStatus1>
+  hardCodeInstr(11) := ("h003101b3".U) //add x3 x2 x3
+  hardCodeInstr(12) := ("h028003ef".U) //jal x7 40 <checkStatus2>
+  hardCodeInstr(13) := ("h00120213".U) //addi x4 x4 1
+  hardCodeInstr(14) := ("hfe5216e3".U) //bne x4 x5 -20 <fibo>
+  hardCodeInstr(15) := ("h0340006f".U) //jal x0 52 <LED>
+  //<checkStatus1>
+  hardCodeInstr(16) := ("h002eae03".U) //lw x28 2 x29
+  hardCodeInstr(17) := ("h01fe1e13".U) //slli x28 x28 31
+  hardCodeInstr(18) := ("h01fe5e13".U) //srli x28 x28 31
+  hardCodeInstr(19) := ("hffee1ae3".U) //bne x28 x30 -12 <checkStatus1>
+  hardCodeInstr(20) := ("h002ea0a3".U) //sw x2 1 x29
+  hardCodeInstr(21) := ("h00038067".U) //jalr x0 x7 0
+  //<checkStatus2>
+  hardCodeInstr(22) := ("h002eae03".U) //lw x28 2 x29
+  hardCodeInstr(23) := ("h01fe1e13".U) //slli x28 x28 31
+  hardCodeInstr(24) := ("h01fe5e13".U) //srli x28 x28 31
+  hardCodeInstr(25) := ("hffee1ae3".U) //bne x28 x30 -12 <checkStatus2>
+  hardCodeInstr(26) := ("h003ea0a3".U) //sw x3 1 x29
+  hardCodeInstr(27) := ("h00038067".U) //jalr x0 x7 0
+  //<LED>
+  hardCodeInstr(28) := ("h003ea023".U) //sw x3 0 x29
+  hardCodeInstr(29) := ("hfa9ff06f".U) //jal x0 -88 <end>
+
+
+  /*
+  //Simple test of uart and led through memmapped outputting ! to uart
+  val hardCodeInstr = Wire(Vec(9,UInt(32.W)))
+
+  hardCodeInstr(0) := ("h02100093".U) //addi x1 x0 33
+  hardCodeInstr(1) := ("h00100113".U) // addi x2 x0 1
+  hardCodeInstr(2) := ("h000011b7".U) //lui x3 0x1
+  //[<loop>]
+  hardCodeInstr(3) := ("h0021a203".U) //lw x4 2 x3
+  hardCodeInstr(4) := ("h00227233".U) //and x4 x4 x2
+  hardCodeInstr(5) := ("hfe221ce3".U) //bne x4 x2 -8 <loop>
+  hardCodeInstr(6) := ("h0011a0a3".U) //sw x1 1 x3
+  hardCodeInstr(7) := ("h0021a023".U) //sw x2 0 x3
+  hardCodeInstr(8) := ("hfedff06f".U) //jal x0 -20 <loop>
   */
-  //test of uart program:
-  val hardCodeInstr = Wire(Vec(6,UInt(32.W)))
-  hardCodeInstr(0) := ("h03100193".U) //addi x3 x0 49 //49=1 in ASCII
-  hardCodeInstr(1) := ("h03200213".U) //addi x4 x0 50 //50=2 in ASCII
-  hardCodeInstr(2) := ("h403020a3".U) //sw x3 1025 x0
-  hardCodeInstr(3) := ("h404020a3".U) //sw x4 1025 x0
-  hardCodeInstr(4) := ("h00a00513".U) //addi x10 x0 10
-  hardCodeInstr(5) := ("h00000073".U) //ecall
 
   //adder wire
   val pcAdded = WireDefault(0.U(32.W))
