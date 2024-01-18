@@ -5,7 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 class TopLevelTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevelSim) { dut =>
+    test(new TopLevel) { dut =>
       dut.io.running.poke(true.B)
       //Insert instruction into the instruction memory:
       dut.io.wrAddr.poke(1.U)
@@ -552,3 +552,6 @@ class TopLevelTester12 extends AnyFlatSpec with
     }
   }
 }
+
+
+

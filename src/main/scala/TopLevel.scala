@@ -11,29 +11,41 @@ class TopLevel extends Module {
     //REAL IO:
     val ioLED = UInt(16.W)
     val uart = UartPins()
+
+    //FOR TESTING
+    val running = Input(Bool())
+    val regFile = Output(Vec(32,SInt(32.W)))
+    val wrAddr  = Input(UInt(10.W))
+    val wrData  = Input(UInt(32.W))
+    val wrEna   = Input(Bool())
+
   })
   // ------------------------------------------------------------------------------
   //Initialize toplevel io (temp):
   val mmUart = MemoryMappedUart(
-    100000000,
-    115200,
+    60000000,
+    9600,
     txBufferDepth = 8,
     rxBufferDepth = 8
-  ) //clockFreq = 100MHz, baud = 115200, bufferDepths = 8?
+  ) //clockFreq = 60MHz, baud = 9600, bufferDepths = 8?
+  //it seems the clkFreq is never used so vivado removes it
 
   // ------------------------------------------------------------------------------
   //Connect everything:
-  val ifModule = Module(new IFModule) //change to IFModuleTest for hardcoding
+  val ifModule = Module(new IFModule) //change to IFModuleTest for hardcoding instructions
   val idModule = Module(new IDModule)
   val exModule = Module(new EXModule)
   val memModule = Module(new MEMModule)
   val forwardingModule = Module(new ForwardingModule)
-  val serialPort = Module(new SerialPort)
 
-  val runningReg = RegInit(false.B)
-  val wrAddr = WireDefault(0.U(10.W))
-  val wrData  = WireDefault(0.U(32.W))
-  val wrEna   = WireDefault(false.B)
+  val halted = RegInit(false.B)
+  halted := halted
+  val runningReg = RegInit(true.B)
+  //runningReg := runningReg //For hardcoding
+  runningReg := io.running //For testing
+  when(halted){
+    runningReg := false.B
+  }
 
   //IF inputs:
   ifModule.io.pcSrc := idModule.io.pcSrc
@@ -49,6 +61,7 @@ class TopLevel extends Module {
   idModule.io.resMEM := memModule.io.regWriteData
   idModule.io.forward1 := forwardingModule.io.branchControl1
   idModule.io.forward2 := forwardingModule.io.branchControl2
+  idModule.io.ldBraHazard := forwardingModule.io.ldBraHazard
 
   //EX inputs:
   exModule.io.rs1data := idModule.io.rs1data
@@ -76,33 +89,25 @@ class TopLevel extends Module {
   forwardingModule.io.rs2IdxEX := exModule.io.memControl.rs2Idx
   forwardingModule.io.rs1IdxID := idModule.io.exControl.rs1Idx
   forwardingModule.io.rs2IdxID := idModule.io.exControl.rs2Idx
+  forwardingModule.io.exHasLoad := exModule.io.memControl.sigBundle.memToReg
 
   //Connect toplevel IO: (comment out for hardcode)
 
-  ifModule.io.wrAddr := wrAddr
-  ifModule.io.wrData := wrData
-  ifModule.io.wrEna  := wrEna
+  ifModule.io.wrAddr := io.wrAddr
+  ifModule.io.wrData := io.wrData
+  ifModule.io.wrEna  := io.wrEna
+  io.regFile := idModule.io.regFile //comment out for hardcode
+
   ifModule.io.running := runningReg
 
-  //Serial Port connections:
-  val instrAddrReg = RegInit(0.U(10.W))
-  instrAddrReg := Mux(serialPort.io.instrValid,instrAddrReg + 1.U,instrAddrReg)
-  serialPort.io.running := runningReg //running should start false
-  when(serialPort.io.readyToRun){
-    runningReg := true.B
-  } .elsewhen(idModule.io.halt){
-    runningReg := false.B //ecall stop running
+  when(idModule.io.halt){
+    halted := true.B //ecall stop running - COMMENT FOR TESTING
     idModule.io.instr := "h00000013".U //flush instruction fetched after ecall
   }
-  wrEna := serialPort.io.instrValid
-  wrData := serialPort.io.instr
-  wrAddr := instrAddrReg
-  serialPort.io.wrEna := memModule.io.ioWrite.wrEna
-  serialPort.io.wrData := memModule.io.ioWrite.wrData
 
   //REAL IO Connections:
   io.ioLED := memModule.io.ioWrite.ioLED
-  serialPort.io.port <> mmUart.io.port
+  memModule.io.port <> mmUart.io.port
   io.uart <> mmUart.io.pins
   // ------------------------------------------------------------------------------
 }

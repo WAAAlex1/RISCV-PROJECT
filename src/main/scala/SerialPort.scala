@@ -18,13 +18,12 @@ class SerialPort extends Module {
     val instr      = Output(UInt(32.W))
     val instrValid = Output(Bool())
 
-    val port = Bus.RequestPort() // bus port
+    val port = Bus.RequestPort()
   })
 
   object State extends ChiselEnum {
     val staReq, // initiate status read
     recvSta, // receive on readstatus
-    writeByte,
     readByte, // read byte1 of the instruction
     wb
     = Value
@@ -34,10 +33,12 @@ class SerialPort extends Module {
   val idxReg = RegInit(3.U(2.W))
   val stateReg = RegInit(State.staReq)
 
-  io.port.init()
+
 
   val wrEnaReg  = RegNext(io.wrEna)
   val wrDataReg = RegNext(io.wrData)
+  val wrEnaRegDelayed = RegNext(wrEnaReg)
+  val wrDataRegDelayed = RegNext(wrDataReg) //these should solve the issues with write timing
 
   //Base cases of outputs:
   io.instrValid := false.B
@@ -52,19 +53,16 @@ class SerialPort extends Module {
     }
     is(State.recvSta){
       when(io.running){
-        stateReg := Mux(io.port.rdData(0),Mux(wrEnaReg,State.writeByte,State.staReq),State.staReq)
+        when(io.port.rdData(0) & wrEnaReg) {
+          io.port.writeRequest(0.U, wrDataReg)
+        } .elsewhen(io.port.rdData(0) & wrEnaRegDelayed){
+          io.port.writeRequest(0.U, wrDataRegDelayed)
+        }
+        stateReg := State.staReq
       } .otherwise {
         stateReg := Mux(io.port.rdData(1),State.readByte,State.staReq)
         io.port.readRequest(0.U) //request read of data even if not needed
       }
-    }
-    is(State.writeByte){
-      io.port.writeRequest(0.U, wrDataReg)
-      stateReg := State.staReq
-
-      //Reset write regs so I dont send the same data twice?
-      wrDataReg := 0.U
-      wrEnaReg := 0.U
     }
     is(State.readByte){
       instrByteVec(idxReg) := io.port.rdData //read byte of instr
@@ -82,6 +80,5 @@ class SerialPort extends Module {
         stateReg := State.staReq //return to base state
       }
     }
-    //write states
   }
 }

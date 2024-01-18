@@ -27,7 +27,7 @@ class IFModule extends Module {
 
   //adder wire
   val pcAdded = WireDefault(0.U(32.W))
-  pcAdded := Mux(io.running,pc + 1.U,pc) //This doesnt work if the first instruction is a jump/branch
+  pcAdded := Mux(io.running,pc + 1.U,pc)
 
   //Mux
   val pcMux = WireDefault(0.U(32.W))
@@ -40,6 +40,6 @@ class IFModule extends Module {
   //INITIALIZE Outputs
   io.instruction := Mux(io.running,Mux(io.pcSrc,"h00000013".U,instrMem.io.rdData),"h00000013".U) //flush if branch is decoded (normal line)
 
-  //SHIFT PC 2 (time it by 4)
+  //SHIFT PC 2 (ti me it by 4)
   io.pc := pc << 2
 }

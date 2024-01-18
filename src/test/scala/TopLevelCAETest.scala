@@ -1,6 +1,8 @@
 import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
+
+//t1 = shift2.s
 class TopLevelCAETest1 extends AnyFlatSpec with // t1 & shift2.s
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -92,6 +94,8 @@ class TopLevelCAETest1 extends AnyFlatSpec with // t1 & shift2.s
     }
   }
 }
+
+//t2 = bool.s
 class TopLevelCAETest2 extends AnyFlatSpec with // t2 & bool.s
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -187,6 +191,8 @@ class TopLevelCAETest2 extends AnyFlatSpec with // t2 & bool.s
     }
   }
 }
+
+//t3 = set.s
 class TopLevelCAETest3 extends AnyFlatSpec with // t3 & set.s
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -274,6 +280,8 @@ class TopLevelCAETest3 extends AnyFlatSpec with // t3 & set.s
     }
   }
 }
+
+//t4 = addlarge.s
 class TopLevelCAETest4 extends AnyFlatSpec with // t4 & addlarge.s
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -348,6 +356,8 @@ class TopLevelCAETest4 extends AnyFlatSpec with // t4 & addlarge.s
     }
   }
 }
+
+//t5 = addneg.s
 class TopLevelCAETest5 extends AnyFlatSpec with // t5 & addneg.s
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -414,6 +424,8 @@ class TopLevelCAETest5 extends AnyFlatSpec with // t5 & addneg.s
     }
   }
 }
+
+//t6 = addpos.s
 class TopLevelCAETest6 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -480,6 +492,8 @@ class TopLevelCAETest6 extends AnyFlatSpec with
     }
   }
 }
+
+//t7 = shift.s
 class TopLevelCAETest7 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -563,6 +577,8 @@ class TopLevelCAETest7 extends AnyFlatSpec with
     }
   }
 }
+
+//t8 = branchtrap.s
 class TopLevelCAETest8 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -706,6 +722,8 @@ class TopLevelCAETest8 extends AnyFlatSpec with
     }
   }
 }
+
+//t9 = branchcht.s
 class TopLevelCAETest9 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -794,6 +812,8 @@ class TopLevelCAETest9 extends AnyFlatSpec with
     }
   }
 }
+
+//t10 = branchMany.s
 class TopLevelCAETest10 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -901,7 +921,9 @@ class TopLevelCAETest10 extends AnyFlatSpec with
     }
   }
 }
-class TopLevelCAETest11 extends AnyFlatSpec with
+
+//t11 = width.s
+class TopLevelCAETest11 extends AnyFlatSpec with // WILL FAIL - t11 /
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevelSim) { dut =>
@@ -1004,90 +1026,420 @@ class TopLevelCAETest11 extends AnyFlatSpec with
     }
   }
 }
+
+//t12 = loop.s
 class TopLevelCAETest12 extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
     test(new TopLevelSim) { dut =>
       dut.io.running.poke(false.B)
       dut.io.wrAddr.poke(0.U)
-      dut.io.wrData.poke("habcdf2b7".U)
+      dut.io.wrData.poke("h3ff00113".U)
       dut.io.wrEna.poke(true.B)
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(1.U)
-      dut.io.wrData.poke("hfab28293".U)
+      dut.io.wrData.poke("h078000ef".U)
 
       dut.clock.step(1)
       dut.io.wrAddr.poke(2.U)
-      dut.io.wrData.poke("h07f00313".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(3.U)
-      dut.io.wrData.poke("h00530023".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(4.U)
-      dut.io.wrData.poke("h005310a3".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(5.U)
-      dut.io.wrData.poke("h005321a3".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(6.U)
-      dut.io.wrData.poke("h00030583".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(7.U)
-      dut.io.wrData.poke("h00131603".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(8.U)
-      dut.io.wrData.poke("h00332683".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(9.U)
-      dut.io.wrData.poke("h00034703".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(10.U)
-      dut.io.wrData.poke("h00135783".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(11.U)
-      dut.io.wrData.poke("h00032803".U)
-
-      dut.clock.step(1)
-      dut.io.wrAddr.poke(12.U)
       dut.io.wrData.poke("h00a00893".U)
 
       dut.clock.step(1)
-      dut.io.wrAddr.poke(13.U)
+      dut.io.wrAddr.poke(3.U)
       dut.io.wrData.poke("h00000073".U)
 
       dut.clock.step(1)
-      dut.io.running.poke(true.B)
+      dut.io.wrAddr.poke(4.U)
+      dut.io.wrData.poke("hfd010113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(5.U)
+      dut.io.wrData.poke("h02812623".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(6.U)
+      dut.io.wrData.poke("h03010413".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(7.U)
+      dut.io.wrData.poke("hfca42e23".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(8.U)
+      dut.io.wrData.poke("hfcb42c23".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(9.U)
+      dut.io.wrData.poke("hfe042623".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(10.U)
+      dut.io.wrData.poke("hfe042423".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(11.U)
+      dut.io.wrData.poke("h0300006f".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(12.U)
+      dut.io.wrData.poke("hfe842783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(13.U)
+      dut.io.wrData.poke("h00279793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(14.U)
+      dut.io.wrData.poke("hfdc42703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(15.U)
+      dut.io.wrData.poke("h00f707b3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(16.U)
+      dut.io.wrData.poke("h0007a783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(17.U)
+      dut.io.wrData.poke("hfec42703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(18.U)
+      dut.io.wrData.poke("h00f707b3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(19.U)
+      dut.io.wrData.poke("hfef42623".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(20.U)
+      dut.io.wrData.poke("hfe842783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(21.U)
+      dut.io.wrData.poke("h00178793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(22.U)
+      dut.io.wrData.poke("hfef42423".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(23.U)
+      dut.io.wrData.poke("hfe842703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(24.U)
+      dut.io.wrData.poke("hfd842783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(25.U)
+      dut.io.wrData.poke("hfcf746e3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(26.U)
+      dut.io.wrData.poke("hfec42783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(27.U)
+      dut.io.wrData.poke("h00078513".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(28.U)
+      dut.io.wrData.poke("h02c12403".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(29.U)
+      dut.io.wrData.poke("h03010113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(30.U)
+      dut.io.wrData.poke("h00008067".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(31.U)
+      dut.io.wrData.poke("hfe010113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(32.U)
+      dut.io.wrData.poke("h00112e23".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(33.U)
+      dut.io.wrData.poke("h00812c23".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(34.U)
+      dut.io.wrData.poke("h00912a23".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(35.U)
+      dut.io.wrData.poke("h02010413".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(36.U)
+      dut.io.wrData.poke("h00010313".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(37.U)
+      dut.io.wrData.poke("h00030493".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(38.U)
+      dut.io.wrData.poke("h06400313".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(39.U)
+      dut.io.wrData.poke("hfe642423".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(40.U)
+      dut.io.wrData.poke("hfe842303".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(41.U)
+      dut.io.wrData.poke("hfff30e13".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(42.U)
+      dut.io.wrData.poke("hffc42223".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(43.U)
+      dut.io.wrData.poke("h00030e13".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(44.U)
+      dut.io.wrData.poke("h000e0813".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(45.U)
+      dut.io.wrData.poke("h00000893".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(46.U)
+      dut.io.wrData.poke("h01b85e13".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(47.U)
+      dut.io.wrData.poke("h00589693".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(48.U)
+      dut.io.wrData.poke("h00de66b3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(49.U)
+      dut.io.wrData.poke("h00581613".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(50.U)
+      dut.io.wrData.poke("h00030693".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(51.U)
+      dut.io.wrData.poke("h00068513".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(52.U)
+      dut.io.wrData.poke("h00000593".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(53.U)
+      dut.io.wrData.poke("h01b55693".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(54.U)
+      dut.io.wrData.poke("h00559793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(55.U)
+      dut.io.wrData.poke("h00f6e7b3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(56.U)
+      dut.io.wrData.poke("h00551713".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(57.U)
+      dut.io.wrData.poke("h00030793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(58.U)
+      dut.io.wrData.poke("h00279793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(59.U)
+      dut.io.wrData.poke("h00f78793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(60.U)
+      dut.io.wrData.poke("h0047d793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(61.U)
+      dut.io.wrData.poke("h00479793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(62.U)
+      dut.io.wrData.poke("h40f10133".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(63.U)
+      dut.io.wrData.poke("h00010793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(64.U)
+      dut.io.wrData.poke("h00378793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(65.U)
+      dut.io.wrData.poke("h0027d793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(66.U)
+      dut.io.wrData.poke("h00279793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(67.U)
+      dut.io.wrData.poke("hfef42023".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(68.U)
+      dut.io.wrData.poke("hfe042623".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(69.U)
+      dut.io.wrData.poke("h0280006f".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(70.U)
+      dut.io.wrData.poke("hfe042703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(71.U)
+      dut.io.wrData.poke("hfec42783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(72.U)
+      dut.io.wrData.poke("h00279793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(73.U)
+      dut.io.wrData.poke("h00f707b3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(74.U)
+      dut.io.wrData.poke("hfec42703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(75.U)
+      dut.io.wrData.poke("h00e7a023".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(76.U)
+      dut.io.wrData.poke("hfec42783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(77.U)
+      dut.io.wrData.poke("h00178793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(78.U)
+      dut.io.wrData.poke("hfef42623".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(79.U)
+      dut.io.wrData.poke("hfec42703".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(80.U)
+      dut.io.wrData.poke("hfe842783".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(81.U)
+      dut.io.wrData.poke("hfcf74ae3".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(82.U)
+      dut.io.wrData.poke("hfe842583".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(83.U)
+      dut.io.wrData.poke("hfe042503".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(84.U)
+      dut.io.wrData.poke("h00000097".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(85.U)
+      dut.io.wrData.poke("hec0080e7".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(86.U)
+      dut.io.wrData.poke("h00050793".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(87.U)
+      dut.io.wrData.poke("h00048113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(88.U)
+      dut.io.wrData.poke("h00078513".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(89.U)
+      dut.io.wrData.poke("hfe040113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(90.U)
+      dut.io.wrData.poke("h01c12083".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(91.U)
+      dut.io.wrData.poke("h01812403".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(92.U)
+      dut.io.wrData.poke("h01412483".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(93.U)
+      dut.io.wrData.poke("h02010113".U)
+
+      dut.clock.step(1)
+      dut.io.wrAddr.poke(94.U)
+      dut.io.wrData.poke("h00008067".U)
+
+
 
       dut.clock.step(1)
       dut.io.wrEna.poke(false.B)
-      dut.clock.step(100)
+      dut.clock.step(1)
+      dut.io.running.poke(true.B)
+      dut.clock.step(1)
+      dut.clock.setTimeout(0)
+      dut.clock.step(50000)
+
       dut.io.regFile(0).expect(0.S)
-      dut.io.regFile(1).expect(0.S)
-      dut.io.regFile(2).expect(0.S)
-      dut.io.regFile(3).expect(0.S)
+      dut.io.regFile(1).expect(8.S)
+
+      dut.io.regFile(3).expect(0.S) //ripes changes this but the code shouldnt
       dut.io.regFile(4).expect(0.S)
-      dut.io.regFile(5).expect(-1412567125.S)
-      dut.io.regFile(6).expect(127.S)
+      dut.io.regFile(5).expect(0.S)
+      dut.io.regFile(6).expect(100.S)
       dut.io.regFile(7).expect(0.S)
       dut.io.regFile(8).expect(0.S)
       dut.io.regFile(9).expect(0.S)
-      dut.io.regFile(10).expect(3.S)
-      dut.io.regFile(11).expect(-85.S)
-      dut.io.regFile(12).expect(-4181.S)
-      dut.io.regFile(13).expect(-1412567125.S)
-      dut.io.regFile(14).expect(171.S)
-      dut.io.regFile(15).expect(61355.S)
-      dut.io.regFile(16).expect(-1410356309.S)
+      dut.io.regFile(10).expect(1920142429.S)
+      dut.io.regFile(11).expect(100.S)
+      dut.io.regFile(12).expect(3200.S)
+      dut.io.regFile(13).expect(0.S)
+      dut.io.regFile(14).expect(100.S)
+      dut.io.regFile(15).expect(1920142429.S)
+      dut.io.regFile(16).expect(100.S)
       dut.io.regFile(17).expect(10.S)
       dut.io.regFile(18).expect(0.S)
       dut.io.regFile(19).expect(0.S)
@@ -1103,7 +1455,7 @@ class TopLevelCAETest12 extends AnyFlatSpec with
       dut.io.regFile(29).expect(0.S)
       dut.io.regFile(30).expect(0.S)
       dut.io.regFile(31).expect(0.S)
-
+      dut.io.regFile(2).expect(1023.S)
     }
   }
 }

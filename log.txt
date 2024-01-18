@@ -198,6 +198,25 @@ DONE(UNTESTED) read instructions from uart
 
 IP      Skriv simulations tests af alle cae tests
             1-10 finished.
-            11 bugged
+            11 bugged - cannot be fixed. Our on-chip memory is configured in words,
+            meaning every single address is 32 bits. This makes it such that instruction 11
+            fetches the 32 bits on address 0(t1). In a "normal" RISCV-processor, this would
+            instead result in 8 bits being loaded from 0(t1), 8 bits being loaded from 1(t1),
+            8 bits being loaded from 2(t1), and 8 bits being loaded from 3(t1). We can't change how
+            our memory works, as this would mean instead of one 32 bit memory we use 4 8 bit memories in parallel.
 
+Dag 12:
+    Hvad arbejder vi på:
+        1. Hardcode in fibonacci program og fpga-teste at den skrive tal til UART.
+        2. Kunne køre alle CAE tests
+
+Dag 13:
+    Hvad arbejder vi på:
+        1. For at kunne load -> branch vælger vi at flushe ID og IF når vi ser branch i ID og load i EX med samme rd
+            Steps:
+                (DONE) Send controlBool til ID om vi har load i EX
+                Lav 'flush' signal fra ID til IF som trigger på alle former for flush (vi flusher allerede på branching)
+                Lav 'flush' af ID stage ved at sætte branch control signaler til false når loadBool er sand
+                Lav -2 til pc når alt dette sker
+        2. Fjern serialport fsm og lad hele ansvaret være på brugeren i software.
 

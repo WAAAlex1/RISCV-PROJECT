@@ -24,7 +24,6 @@ class IDModule extends Module {
     val pcOut         = Output(UInt(32.W))
     val rd            = Output(UInt(5.W))
     val imm           = Output(SInt(32.W))
-    val regFile       = Output(Vec(32,SInt(32.W)))
     val branchAddr    = Output(UInt(32.W))
     val pcSrc         = Output(Bool())
     val halt          = Output(Bool())
@@ -35,12 +34,16 @@ class IDModule extends Module {
     val forward1 = Input(UInt(2.W))
     val forward2 = Input(UInt(2.W))
 
+    //Control in:
+    val ldBraHazard = Input(Bool())
+
     //Control signals Out
     val exControl = Output(new EXBundle)
 
     //Temp outputs for testing
     val aluControl = Output(UInt(4.W)) //MSB is used for funct7, the rest is funct3
     val aluOPType = Output(UInt(2.W))
+    val regFile       = Output(Vec(32,SInt(32.W)))
   })
 
   //-----------------------------------------------------------------------------
@@ -238,11 +241,12 @@ class IDModule extends Module {
     registerFile(io.writeRegIdx) := io.writeRegData
   }
 
-  //AddSum (Calculate branch address)
-  io.branchAddr := Mux(pcSelect, rs1data + io.imm, pcIn.asSInt + io.imm).asUInt
-
   //pcSrc:
-  io.pcSrc := (branch & branchCheck)
+  io.pcSrc := branch & branchCheck
+  val ldBranchHazard = io.pcSrc & io.ldBraHazard
+  //AddSum (branch address calculation)
+  //If loadBranch hazard, set branchaddr to PC, else set branch hazard dependent on pcSelect.
+  io.branchAddr := Mux(ldBranchHazard, pcIn, Mux(pcSelect, rs1data + io.imm, pcIn.asSInt + io.imm).asUInt)
 
   //IO
   io.pcOut := pcIn

@@ -11,6 +11,8 @@ class ForwardingModule extends Module{
     val rs2IdxID = Input(UInt(5.W))
     val rs2IdxEX = Input(UInt(5.W))
 
+    val exHasLoad = Input(Bool())
+
     val rdEX = Input(UInt(5.W))
     val rdMEM = Input(UInt(5.W))
 
@@ -20,8 +22,9 @@ class ForwardingModule extends Module{
     //Control out
     val branchControl1 = Output(UInt(2.W)) // Three options - normal, blue, green, see figure
     val branchControl2 = Output(UInt(2.W)) // Three options - normal, blue, green, see figure
-    val aluControl1 = Output(Bool()) // Two options - either load the value from registerfile (normal, 0) or load writeback value from previous instruction (forwarding, 1)
-    val aluControl2 = Output(Bool()) // Two options - either load the value from registerfile (normal, 0) or load writeback value from previous instruction (forwarding, 1)
+    val aluControl1    = Output(Bool()) // Two options - either load the value from registerfile (normal, 0) or load writeback value from previous instruction (forwarding, 1)
+    val aluControl2    = Output(Bool()) // Two options - either load the value from registerfile (normal, 0) or load writeback value from previous instruction (forwarding, 1)
+    val ldBraHazard    = Output(Bool())
   })
 
   //Base case (no forwarding):
@@ -29,6 +32,7 @@ class ForwardingModule extends Module{
   io.branchControl2 := 0.U
   io.aluControl1 := false.B
   io.aluControl2 := false.B
+  io.ldBraHazard := false.B
 
   //Decoding:
   //ALU Control signals for forwarding
@@ -63,4 +67,10 @@ class ForwardingModule extends Module{
   when(io.regWriteMEM & (io.rdMEM === io.rs2IdxID)){
     io.branchControl2 := 2.U
   }
+
+  //Determine if there is a load followed by a branch using the same rd:
+  when(io.exHasLoad & ((io.rdEX === io.rs1IdxID) | (io.rdEX === io.rs2IdxID))){
+    io.ldBraHazard := true.B
+  }
+
 }

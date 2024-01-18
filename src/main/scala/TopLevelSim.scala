@@ -22,6 +22,7 @@ class TopLevelSim extends Module {
   //Initialize toplevel io (temp):
 
   val halted = RegInit(false.B)
+  halted := halted
   val runningReg = RegInit(false.B)
   runningReg := io.running
   when(halted){
@@ -50,6 +51,7 @@ class TopLevelSim extends Module {
   idModule.io.resMEM := memModule.io.regWriteData
   idModule.io.forward1 := forwardingModule.io.branchControl1
   idModule.io.forward2 := forwardingModule.io.branchControl2
+  idModule.io.ldBraHazard := forwardingModule.io.ldBraHazard
 
   //EX inputs:
   exModule.io.rs1data := idModule.io.rs1data
@@ -77,6 +79,7 @@ class TopLevelSim extends Module {
   forwardingModule.io.rs2IdxEX := exModule.io.memControl.rs2Idx
   forwardingModule.io.rs1IdxID := idModule.io.exControl.rs1Idx
   forwardingModule.io.rs2IdxID := idModule.io.exControl.rs2Idx
+  forwardingModule.io.exHasLoad := exModule.io.memControl.sigBundle.memToReg
 
   //Connect toplevel IO: (comment out for hardcode)
 
