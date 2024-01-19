@@ -1,41 +1,49 @@
 import Import.MemoryMappedUart
 import Import.MemoryMappedUart.UartPins
-import Import.Bus
-
 import chisel3._
 
-class TopLevelSim extends Module {
+
+//Toplevel module with UART
+class TopLevelSynthesize extends Module {
   val io = IO(new Bundle {
-    //Stuff for chisel testing (comment out for hardcode or synthesize):
+    //REAL IO:
+    val ioLED = UInt(16.W)
+    val uart = UartPins()
+
+    //FOR TESTING
+    /*
+    val running = Input(Bool())
+    val regFile = Output(Vec(32,SInt(32.W)))
     val wrAddr  = Input(UInt(10.W))
     val wrData  = Input(UInt(32.W))
     val wrEna   = Input(Bool())
-    val regFile = Output(Vec(32,SInt(32.W)))
-
-    //control the program:
-    val running = Input(Bool())
-
-    //REAL IO:
-    val ioLED = UInt(16.W)
+    */
   })
   // ------------------------------------------------------------------------------
   //Initialize toplevel io (temp):
-
-  val halted = RegInit(false.B)
-  halted := halted
-  val runningReg = RegInit(false.B)
-  runningReg := io.running
-  when(halted){
-    runningReg := false.B
-  }
+  val mmUart = MemoryMappedUart(
+    60000000,
+    9600,
+    txBufferDepth = 16,
+    rxBufferDepth = 16
+  ) //clockFreq = 60MHz, baud = 9600, bufferDepths = 16
 
   // ------------------------------------------------------------------------------
   //Connect everything:
-  val ifModule = Module(new IFModule) //change to IFModuleTest for hardcoding
+  val ifModule = Module(new IFModuleTest) //change to IFModuleTest for hardcoding instructions
   val idModule = Module(new IDModule)
   val exModule = Module(new EXModule)
   val memModule = Module(new MEMModule)
   val forwardingModule = Module(new ForwardingModule)
+
+  val halted = RegInit(false.B)
+  halted := halted
+  val runningReg = RegInit(true.B) //true.B for hardcoding, false.B for testing
+  runningReg := runningReg //For hardcoding
+  //runningReg := io.running //For testing
+  when(halted){
+    runningReg := false.B
+  }
 
   //IF inputs:
   ifModule.io.pcSrc := idModule.io.pcSrc
@@ -52,6 +60,7 @@ class TopLevelSim extends Module {
   idModule.io.forward1 := forwardingModule.io.branchControl1
   idModule.io.forward2 := forwardingModule.io.branchControl2
   idModule.io.ldBraHazard := forwardingModule.io.ldBraHazard
+  idModule.io.ecallForward := forwardingModule.io.ecallForward
 
   //EX inputs:
   exModule.io.rs1data := idModule.io.rs1data
@@ -82,26 +91,27 @@ class TopLevelSim extends Module {
   forwardingModule.io.exHasLoad := exModule.io.memControl.sigBundle.memToReg
 
   //Connect toplevel IO: (comment out for hardcode)
-
+  /*
   ifModule.io.wrAddr := io.wrAddr
   ifModule.io.wrData := io.wrData
   ifModule.io.wrEna  := io.wrEna
+  io.regFile := idModule.io.regFile //comment out for hardcode
+  */
+
   ifModule.io.running := runningReg
 
-  io.regFile := idModule.io.regFile //comment out for hardcode
-
   when(idModule.io.halt){
-    halted := true.B //ecall stop running
+    halted := true.B //ecall stop running - COMMENT FOR TESTING(why?)
     idModule.io.instr := "h00000013".U //flush instruction fetched after ecall
   }
 
   //REAL IO Connections:
   io.ioLED := memModule.io.ioWrite.ioLED
-
-
+  memModule.io.port <> mmUart.io.port
+  io.uart <> mmUart.io.pins
   // ------------------------------------------------------------------------------
 }
 
-object TopLevelSim extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new TopLevel)
+object TopLevelSynthesize extends App {
+  (new chisel3.stage.ChiselStage).emitVerilog(new TopLevelSynthesize)
 }

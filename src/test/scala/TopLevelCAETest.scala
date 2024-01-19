@@ -2,7 +2,7 @@
 import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
-/*
+
 //t1 = shift2.s
 class TopLevelCAETest1 extends AnyFlatSpec with // t1 & shift2.s
   ChiselScalatestTester {
@@ -1966,4 +1966,3 @@ class TopLevelCAETest14 extends AnyFlatSpec with
   }
 }
 
-*/

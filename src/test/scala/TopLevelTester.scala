@@ -2,7 +2,7 @@
 import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
-/*
+
 class TopLevelTester extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
@@ -552,11 +552,12 @@ class TopLevelTester12 extends AnyFlatSpec with
     }
   }
 }
-*/
+
+//This test is here to check the VCD output
 class TopLevelTesterUART extends AnyFlatSpec with
   ChiselScalatestTester {
   "TopLevel" should "pass" in {
-    test(new TopLevel) { dut =>
+    test(new TopLevelSynthesize) { dut =>
       dut.clock.step(1)
       dut.clock.step(300)
     }
