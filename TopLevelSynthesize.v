@@ -37,7 +37,7 @@ module Tx(
     if (reset) begin // @[Uart.scala 31:23]
       cntReg <= 20'h0; // @[Uart.scala 31:23]
     end else if (_io_channel_ready_T) begin // @[Uart.scala 37:24]
-      cntReg <= 20'h1869; // @[Uart.scala 39:12]
+      cntReg <= 20'h1660; // @[Uart.scala 39:12]
     end else begin
       cntReg <= _cntReg_T_1; // @[Uart.scala 54:12]
     end
@@ -144,9 +144,9 @@ module Rx(
     end else if (cntReg != 20'h0) begin // @[Uart.scala 83:24]
       cntReg <= _cntReg_T_1; // @[Uart.scala 84:12]
     end else if (bitsReg != 4'h0) begin // @[Uart.scala 85:31]
-      cntReg <= 20'h1869; // @[Uart.scala 86:12]
+      cntReg <= 20'h1660; // @[Uart.scala 86:12]
     end else if (~rxReg) begin // @[Uart.scala 93:29]
-      cntReg <= 20'h249e; // @[Uart.scala 94:12]
+      cntReg <= 20'h2191; // @[Uart.scala 94:12]
     end
     if (reset) begin // @[Uart.scala 80:24]
       bitsReg <= 4'h0; // @[Uart.scala 80:24]
@@ -513,46 +513,47 @@ module IFModuleTest(
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
   reg [31:0] pc; // @[IFModuleTest.scala 17:19]
-  wire [31:0] _pcAdded_T_1 = pc + 32'h1; // @[IFModuleTest.scala 78:32]
-  wire [31:0] _GEN_1 = 5'h1 == pc[4:0] ? 32'h113 : 32'h100193; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_2 = 5'h2 == pc[4:0] ? 32'h500293 : _GEN_1; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_3 = 5'h3 == pc[4:0] ? 32'h1f00f93 : _GEN_2; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_4 = 5'h4 == pc[4:0] ? 32'h100f13 : _GEN_3; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_5 = 5'h5 == pc[4:0] ? 32'h1eb7 : _GEN_4; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_6 = 5'h6 == pc[4:0] ? 32'hc0006f : _GEN_5; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_7 = 5'h7 == pc[4:0] ? 32'ha00893 : _GEN_6; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_8 = 5'h8 == pc[4:0] ? 32'h73 : _GEN_7; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_9 = 5'h9 == pc[4:0] ? 32'h218133 : _GEN_8; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_10 = 5'ha == pc[4:0] ? 32'h18003ef : _GEN_9; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_11 = 5'hb == pc[4:0] ? 32'h3101b3 : _GEN_10; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_12 = 5'hc == pc[4:0] ? 32'h28003ef : _GEN_11; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_13 = 5'hd == pc[4:0] ? 32'h120213 : _GEN_12; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_14 = 5'he == pc[4:0] ? 32'hfe5216e3 : _GEN_13; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_15 = 5'hf == pc[4:0] ? 32'h340006f : _GEN_14; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_16 = 5'h10 == pc[4:0] ? 32'h2eae03 : _GEN_15; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_17 = 5'h11 == pc[4:0] ? 32'h1fe1e13 : _GEN_16; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_18 = 5'h12 == pc[4:0] ? 32'h1fe5e13 : _GEN_17; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_19 = 5'h13 == pc[4:0] ? 32'hffee1ae3 : _GEN_18; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_20 = 5'h14 == pc[4:0] ? 32'h2ea0a3 : _GEN_19; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_21 = 5'h15 == pc[4:0] ? 32'h38067 : _GEN_20; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_22 = 5'h16 == pc[4:0] ? 32'h2eae03 : _GEN_21; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_23 = 5'h17 == pc[4:0] ? 32'h1fe1e13 : _GEN_22; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_24 = 5'h18 == pc[4:0] ? 32'h1fe5e13 : _GEN_23; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_25 = 5'h19 == pc[4:0] ? 32'hffee1ae3 : _GEN_24; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_26 = 5'h1a == pc[4:0] ? 32'h3ea0a3 : _GEN_25; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_27 = 5'h1b == pc[4:0] ? 32'h38067 : _GEN_26; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_28 = 5'h1c == pc[4:0] ? 32'h3ea023 : _GEN_27; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _GEN_29 = 5'h1d == pc[4:0] ? 32'hfa9ff06f : _GEN_28; // @[IFModuleTest.scala 86:{39,39}]
-  wire [31:0] _io_instruction_T_1 = io_pcSrc ? 32'h13 : _GEN_29; // @[IFModuleTest.scala 86:39]
-  wire [33:0] _io_pc_T = {pc, 2'h0}; // @[IFModuleTest.scala 90:15]
-  assign io_instruction = io_running ? _io_instruction_T_1 : 32'h13; // @[IFModuleTest.scala 86:24]
-  assign io_pc = _io_pc_T[31:0]; // @[IFModuleTest.scala 90:9]
+  wire [31:0] _pcAdded_T_1 = pc + 32'h1; // @[IFModuleTest.scala 117:32]
+  wire [31:0] _GEN_1 = 5'h1 == pc[4:0] ? 32'h100193 : 32'h893; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_2 = 5'h2 == pc[4:0] ? 32'h113 : _GEN_1; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_3 = 5'h3 == pc[4:0] ? 32'h500293 : _GEN_2; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_4 = 5'h4 == pc[4:0] ? 32'h1f00f93 : _GEN_3; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_5 = 5'h5 == pc[4:0] ? 32'h100f13 : _GEN_4; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_6 = 5'h6 == pc[4:0] ? 32'h1eb7 : _GEN_5; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_7 = 5'h7 == pc[4:0] ? 32'h4000337 : _GEN_6; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_8 = 5'h8 == pc[4:0] ? 32'h213 : _GEN_7; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_9 = 5'h9 == pc[4:0] ? 32'h40006f : _GEN_8; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_10 = 5'ha == pc[4:0] ? 32'h218133 : _GEN_9; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_11 = 5'hb == pc[4:0] ? 32'h18003ef : _GEN_10; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_12 = 5'hc == pc[4:0] ? 32'h3101b3 : _GEN_11; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_13 = 5'hd == pc[4:0] ? 32'h24003ef : _GEN_12; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_14 = 5'he == pc[4:0] ? 32'h120213 : _GEN_13; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_15 = 5'hf == pc[4:0] ? 32'hfe5216e3 : _GEN_14; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_16 = 5'h10 == pc[4:0] ? 32'h2c0006f : _GEN_15; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_17 = 5'h11 == pc[4:0] ? 32'h2eae03 : _GEN_16; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_18 = 5'h12 == pc[4:0] ? 32'h1ee7e33 : _GEN_17; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_19 = 5'h13 == pc[4:0] ? 32'hffee1ce3 : _GEN_18; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_20 = 5'h14 == pc[4:0] ? 32'h2ea0a3 : _GEN_19; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_21 = 5'h15 == pc[4:0] ? 32'h38067 : _GEN_20; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_22 = 5'h16 == pc[4:0] ? 32'h2eae03 : _GEN_21; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_23 = 5'h17 == pc[4:0] ? 32'h1ee7e33 : _GEN_22; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_24 = 5'h18 == pc[4:0] ? 32'hffee1ce3 : _GEN_23; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_25 = 5'h19 == pc[4:0] ? 32'h3ea0a3 : _GEN_24; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_26 = 5'h1a == pc[4:0] ? 32'h38067 : _GEN_25; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_27 = 5'h1b == pc[4:0] ? 32'h3ea023 : _GEN_26; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_28 = 5'h1c == pc[4:0] ? 32'hfff30313 : _GEN_27; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_29 = 5'h1d == pc[4:0] ? 32'hffe31ee3 : _GEN_28; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _GEN_30 = 5'h1e == pc[4:0] ? 32'hf89ff06f : _GEN_29; // @[IFModuleTest.scala 125:{39,39}]
+  wire [31:0] _io_instruction_T_1 = io_pcSrc ? 32'h13 : _GEN_30; // @[IFModuleTest.scala 125:39]
+  wire [33:0] _io_pc_T = {pc, 2'h0}; // @[IFModuleTest.scala 129:15]
+  assign io_instruction = io_running ? _io_instruction_T_1 : 32'h13; // @[IFModuleTest.scala 125:24]
+  assign io_pc = _io_pc_T[31:0]; // @[IFModuleTest.scala 129:9]
   always @(posedge clock) begin
     if (reset) begin // @[IFModuleTest.scala 17:19]
       pc <= 32'h0; // @[IFModuleTest.scala 17:19]
-    end else if (io_pcSrc) begin // @[IFModuleTest.scala 82:15]
+    end else if (io_pcSrc) begin // @[IFModuleTest.scala 121:15]
       pc <= {{2'd0}, io_branchAddr[31:2]};
-    end else if (io_running) begin // @[IFModuleTest.scala 78:17]
+    end else if (io_running) begin // @[IFModuleTest.scala 117:17]
       pc <= _pcAdded_T_1;
     end
   end
@@ -1708,7 +1709,7 @@ module ForwardingModule(
   assign io_ecallForward = io_regWriteEX & io_rdEX == 5'h11 ? 2'h1 : _GEN_7; // @[ForwardingModule.scala 80:41 81:21]
 endmodule
 module TopLevelSynthesize(
-  input         clock,
+  input         clk_in1,
   input         reset,
   output [15:0] io_ioLED,
   output        io_uart_tx,
@@ -1942,6 +1943,15 @@ module TopLevelSynthesize(
     .io_ldBraHazard(forwardingModule_io_ldBraHazard),
     .io_ecallForward(forwardingModule_io_ecallForward)
   );
+    clk_wiz_0 instance_name
+   (
+    // Clock out ports
+    .clock(clock),     // output clock
+    // Status and control signals
+    .reset(reset), // input reset
+    .locked(locked),       // output locked
+   // Clock in ports
+    .clk_in1(clk_in1));      // input clk_in1
   assign io_ioLED = memModule_io_ioWrite_ioLED; // @[TopLevelSynthesize.scala 109:12]
   assign io_uart_tx = mmUart_io_pins_tx; // @[TopLevelSynthesize.scala 111:11]
   assign mmUart_clock = clock;
