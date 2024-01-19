@@ -29,9 +29,10 @@ The verilog needs to be altered to change the clockfrequency. This is done by co
 Then changing the clock signal in the toplevel io in verilog to be named `clk_in1` instead of `clock`
 
 We then need to add a clock wizard module that creates the new clock. This can be done usin vivados clock wizard ip. 
-We have already done this for you so all you need to do is add the `clk_wiz_0.xci` 
+We have already done this for you so all you need to do is add the `clk_wiz_0.xci` as a file under the toplevel file in vivado.
 
-The TopLevelSynthesize toplevel-file has a hardcoded instrmemory that runs the following program:
+Now you should be good to synthesize the processor on the FPGA.
+The synthesized processor has a hardcoded instrmemory that runs the following program:
 ```
 main:
     addi x3 x0 1
