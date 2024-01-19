@@ -35,17 +35,16 @@ Now you should be good to synthesize the processor on the FPGA.
 The synthesized processor has a hardcoded instrmemory that runs the following program:
 ```
 main:
+    li a7, 0
     addi x3 x0 1
     addi x2 x0 0
     addi x5 x0 5
     addi x31 x0 31
     addi x30 x0 1
-    ##addi x28 x0 3
     li x29 4096
+    li x6  0x4000000
+    addi x4 x0 0
     j fibo
-end:
-    li a7, 10
-    ecall
 fibo:
     add x2 x3 x2 #fibo op 1
     jal x7 checkStatus1
@@ -56,23 +55,23 @@ fibo:
     j LED
 checkStatus1:
     lw x28 2(x29)
-    slli x28 x28 31
-    srli x28 x28 31
+    and x28 x28 x30
     bne x28 x30 checkStatus1
     sw x2 1(x29) #memory mapped uart
     jr x7
 checkStatus2:
     lw x28 2(x29)
-    slli x28 x28 31
-    srli x28 x28 31
+    and x28 x28 x30
     bne x28 x30 checkStatus2
     sw x3 1(x29) #memory mapped uart
     jr x7
 LED:
-    sw x3 0(x29) #memory mapped uart
-    j end
+    sw x3 0(x29) #memory mapped LED
+    addi x6 x6 -1
+    bne x6 x30 -4
+    j main
 ```
-This program calculates a small sequence of fibonacci numbers and outputs them as raw data bytes to the uart while doing handshaking.
+This program calculates a small sequence of fibonacci numbers and outputs them continuously as raw data bytes to the uart while doing handshaking.
 The LED IO is also utilized to display the last number of the sequence in binary.
 
 ## Credits
