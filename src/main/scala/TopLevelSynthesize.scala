@@ -22,7 +22,7 @@ class TopLevelSynthesize extends Module {
   // ------------------------------------------------------------------------------
   //Initialize toplevel io (temp):
   val mmUart = MemoryMappedUart(
-    60000000,
+    55000000,
     9600,
     txBufferDepth = 16,
     rxBufferDepth = 16
