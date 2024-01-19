@@ -17,7 +17,7 @@ class IFModuleTest extends Module {
   val pc = RegInit(0.U(32.W))
 
   //hardcode for printing fibo num to uart
-
+  /*
   val hardCodeInstr = Wire(Vec(30,UInt(32.W)))
   //<main>
   hardCodeInstr(0) := ("h00100193".U) //addi x3 x0 1
@@ -55,8 +55,43 @@ class IFModuleTest extends Module {
   //<LED>
   hardCodeInstr(28) := ("h003ea023".U) //sw x3 0 x29
   hardCodeInstr(29) := ("hfa9ff06f".U) //jal x0 -88 <end>
-
-
+  */
+  val hardCodeInstr = Wire(Vec(30,UInt(32.W)))
+  //<main>
+  hardCodeInstr(0) := ("h00000893".U) // addi x17 x0 0
+  hardCodeInstr(1) := ("h00100193".U) // addi x3 x0 1
+  hardCodeInstr(2) := ("h00000113".U) //addi x2 x0 0
+  hardCodeInstr(3) := ("h00500293".U) //addi x5 x0 5
+  hardCodeInstr(4) := ("h01f00f93".U) //addi x31 x0 31
+  hardCodeInstr(5) := ("h00100f13".U) //addi x30 x0 1
+  hardCodeInstr(6) := ("h00001eb7".U) //lui x29 0x1
+  hardCodeInstr(7) := ("h04000337".U) //lui x6 0x4000
+  hardCodeInstr(8) := ("h0040006f".U) //jal x0 4 <fibo>
+  //<fibo>
+  hardCodeInstr(9) := ("h00218133".U) //add x2 x3 x2
+  hardCodeInstr(10) := ("h018003ef".U) //jal x7 24 <checkStatus1>
+  hardCodeInstr(11) := ("h003101b3".U) //add x3 x2 x3
+  hardCodeInstr(12) := ("h024003ef".U) //jal x7 36 <checkStatus2>
+  hardCodeInstr(13) := ("h00120213".U) //addi x4 x4 1
+  hardCodeInstr(14) := ("hfe5216e3".U) //bne x4 x5 -20 <fibo>
+  hardCodeInstr(15) := ("h02c0006f".U) //jal x0 44 <LED>
+  //<checkStatus1>
+  hardCodeInstr(16) := ("h002eae03".U) //lw x28 2 x29
+  hardCodeInstr(17) := ("h01ee7e33".U) //and x28 x28 x30
+  hardCodeInstr(18) := ("hffee1ce3".U) //bne x28 x30 -8 <checkStatus1>
+  hardCodeInstr(19) := ("h002ea0a3".U) //sw x2 1 x29
+  hardCodeInstr(20) := ("h00038067".U) //jalr x0 x7 0
+  //<checkStatus2>
+  hardCodeInstr(21) := ("h002eae03".U) //lw x28 2 x29
+  hardCodeInstr(22) := ("h01ee7e33".U) //and x28 x28 x30
+  hardCodeInstr(23) := ("hffee1ce3".U) //bne x28 x30 -8 <checkStatus2>
+  hardCodeInstr(24) := ("h003ea0a3".U) //sw x3 1 x29
+  hardCodeInstr(25) := ("h00038067".U) //jalr x0 x7 0
+  //<LED>
+  hardCodeInstr(26) := ("h003ea023".U) //sw x3 0 x29
+  hardCodeInstr(27) := ("hfff30313".U) //addi x6 x6 -1
+  hardCodeInstr(28) := ("hffe31ee3".U) //bne x6 x30 -4
+  hardCodeInstr(29) := ("hf8dff06f".U) //jal x0 -88 <end>
   /*
   //Simple test of uart and led through memmapped outputting ! to uart
   val hardCodeInstr = Wire(Vec(9,UInt(32.W)))

@@ -27,7 +27,7 @@ class IFTester extends AnyFlatSpec with
     }
   }
 }
-class IFTester2 extends AnyFlatSpec with
+class IF2Tester extends AnyFlatSpec with
   ChiselScalatestTester {
   "IF stage" should "pass" in {
     test(new IFModule) { dut =>

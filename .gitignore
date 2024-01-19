@@ -22,4 +22,9 @@
 TopLevel.anno.json
 TopLevel.fir
 TopLevel.v
-putty.log.txt
+LOGS/putty.log
+TopLevelSynthesize.fir
+TopLevelSynthesize.v
+TopLevelSynthesize.fir
+*.fir
+*.v
